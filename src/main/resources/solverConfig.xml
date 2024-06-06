@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<solver>
+    <solutionClass>com.rostering.employeerostering.entity.Roster</solutionClass>
+    <entityClass>com.rostering.employeerostering.entity.ShiftAssignment</entityClass>
+
+    <scoreDirectorFactory>
+        <constraintProviderClass>com.rostering.employeerostering.constraint.EmployeeRosteringConstraintProvider</constraintProviderClass>
+    </scoreDirectorFactory>
+
+    <termination>
+        <spentLimit>1m</spentLimit>
+    </termination>
+</solver>
