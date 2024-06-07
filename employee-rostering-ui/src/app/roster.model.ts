@@ -1,6 +1,7 @@
 export interface Employee {
   id?: number;
   name: string;
+  preferredShifts?: Shift[];
 }
 
 export interface Shift {

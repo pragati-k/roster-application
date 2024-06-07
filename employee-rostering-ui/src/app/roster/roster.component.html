@@ -1,47 +1,66 @@
-<div>
-  <h1>Employee Rostering</h1>
+<div class="container">
+  <h1 class="text-center">Employee Rostering</h1>
+  <div class="row">
+    <div class="col-6">
+      <div>
+        <h2>Add Employee</h2>
+        <input [(ngModel)]="newEmployee.name" placeholder="Employee Name">
+        <button (click)="addEmployee()">Add Employee</button>
+      </div>
+      <h2>Preferred Shifts</h2>
+      <div *ngFor="let employee of roster.employeeList">
+        <h3><b>Employee Name</b> : {{ employee.name }}</h3>
+        <div *ngFor="let shift of employee.preferredShifts">
+          <p>Start: {{ shift.startTime | date: "short" }} || End: {{ shift.endTime | date: "short"}}</p>
+        </div>
+        <label>Preferred Shift Start: </label>
+        <input type="datetime-local" [(ngModel)]="newPreferredShift.startTime" placeholder="Shift Start"><br>
+        <label>Preferred Shift End: </label>
+        <input type="datetime-local" [(ngModel)]="newPreferredShift.endTime" placeholder="Shift End">
+        <button (click)="addPreferredShift(employee)">Add Preferred Shift</button>
+      </div>
 
-  <div>
-    <h2>Add Employee</h2>
-    <input [(ngModel)]="newEmployee.name" placeholder="Employee Name">
-    <button (click)="addEmployee()">Add Employee</button>
-  </div>
+      <div>
+        <h2>Add Shift</h2>
+        <input type="datetime-local" [(ngModel)]="newShift.startTime" placeholder="Start Time">
+        <input type="datetime-local" [(ngModel)]="newShift.endTime" placeholder="End Time">
+        <button (click)="addShift()">Add Shift</button>
+      </div>
 
-  <div>
-    <h2>Add Shift</h2>
-    <input type="datetime-local" [(ngModel)]="newShift.startTime" placeholder="Start Time">
-    <input type="datetime-local" [(ngModel)]="newShift.endTime" placeholder="End Time">
-    <button (click)="addShift()">Add Shift</button>
-  </div>
-
-  <div>
-    <h2>Employee List</h2>
-    <ul>
-      <li *ngFor="let employee of roster.employeeList">{{ employee.name }}</li>
-    </ul>
-  </div>
-
-  <div>
-    <h2>Shift List</h2>
-    <ul>
-      <li *ngFor="let shift of roster.shiftList">
-        {{ shift.startTime }} - {{ shift.endTime }}
-      </li>
-    </ul>
-  </div>
-
-  <button (click)="solveRoster()">Generate Roster</button>
-  <button (click)="getSolveRoster()">Get Roster</button>
-  <button (click)="terminateSolveRoster()">Terminate Roster</button>
-  <div *ngIf="roster.shiftAssignmentList">
-    <h2>Generated Roster</h2>
-    <ul>
-      <li *ngFor="let assignment of roster.shiftAssignmentList">
-        {{ assignment.shift.startTime | date : "short"}} - {{ assignment.shift.endTime |  date : "short" }}: {{ assignment.employee?.name || 'Unassigned' }}
-      </li>
-    </ul>
-  </div>
-  <div>
-    {{message}}
+      <div>
+        <h2>Shift List</h2>
+        <ul>
+          <li *ngFor="let shift of roster.shiftList">
+            {{ shift.startTime | date: "short"}} - {{ shift.endTime | date: "short" }}
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-6">
+    <button (click)="solveRoster()">Generate Roster</button>
+    <button (click)="getSolveRoster()">Get Roster</button>
+    <button (click)="terminateSolveRoster()">Terminate Roster</button>
+    <div *ngIf="roster.shiftAssignmentList">
+      <h2>Generated Roster</h2>
+      <ul>
+        <li *ngFor="let assignment of roster.shiftAssignmentList">
+          {{ assignment.shift.startTime | date : "short"}} - {{ assignment.shift.endTime |  date : "short" }}
+          : {{ assignment.employee?.name || 'Unassigned' }}
+        </li>
+      </ul>
+    </div>
+      <div>
+        <h2>Score</h2>
+        <li>initScore : {{roster.score?.initScore}}</li>
+        <li>hardScore : {{roster.score?.hardScore}}</li>
+        <li>softScore : {{roster.score?.softScore}}</li>
+        <li>feasible : {{roster.score?.feasible}}</li>
+        <li>solutionInitialized : {{roster.score?.solutionInitialized}}</li>
+        <li>zero : {{roster.score?.zero}}</li>
+      </div>
+    <div>
+      {{message}}
+    </div>
+    </div>
   </div>
 </div>

@@ -10,29 +10,36 @@ import {RosterService} from "../roster.service";
 export class RosterComponent {
 
   roster: Roster = { employeeList: [], shiftList: [], shiftAssignmentList:[] };
-  newEmployee: Employee = { name: '' };
+  newEmployee: Employee = { name: '' , preferredShifts: []};
+  newPreferredShift: Shift = { startTime: '', endTime: ''};
   newShift: Shift = { startTime: '', endTime: ''};
-  newShiftAssignment: ShiftAssignment = {
-    shift: {startTime: '', endTime: ''}
-  }
   problemId = '';
   message = '';
+  count = 0;
 
   constructor(private rosteringService: RosterService) {}
 
   addEmployee() {
     this.roster.employeeList.push({ ...this.newEmployee });
-    this.newEmployee = { name: '' };
+    this.newEmployee = { name: '' , preferredShifts: []};
+  }
+
+  addPreferredShift(employee: Employee) {
+    employee.preferredShifts?.push({ ...this.newPreferredShift });
+    this.newPreferredShift = { startTime: '', endTime: '' };
   }
 
   addShift() {
     let newShiftAssignment = {
+      id:0,
       shift: {startTime: '', endTime: ''}
     }
     this.roster.shiftList.push({ ...this.newShift });
     newShiftAssignment.shift = this.newShift;
     this.newShift = { startTime: '', endTime:''};
+    newShiftAssignment.id = this.count;
     this.roster.shiftAssignmentList?.push(newShiftAssignment);
+    this.count++;
   }
 
   solveRoster(){
