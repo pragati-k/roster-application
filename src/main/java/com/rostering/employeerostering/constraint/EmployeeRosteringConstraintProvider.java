@@ -21,7 +21,21 @@ public class EmployeeRosteringConstraintProvider implements ConstraintProvider {
                         .join(ShiftAssignment.class,
                                 Joiners.equal(ShiftAssignment::getEmployee))
                         .filter((assignment1, assignment2) -> !assignment1.equals(assignment2))
-                        .penalize("Employee conflict", HardSoftScore.ONE_HARD)
+                        .penalize("Employee conflict", HardSoftScore.ONE_HARD),
+                constraintFactory.forEachUniquePair(ShiftAssignment.class,
+                                Joiners.equal(ShiftAssignment::getEmployee),
+                                Joiners.overlapping(
+                                        shiftAssignment -> shiftAssignment.getShift().getStartTime(),
+                                        shiftAssignment -> shiftAssignment.getShift().getEndTime()
+                                ))
+                        .penalize("Avoid overlapping shifts", HardSoftScore.ONE_HARD),
+                constraintFactory.forEach(ShiftAssignment.class)
+                        .filter(shiftAssignment ->
+                                shiftAssignment.getEmployee().getPreferredShifts().stream()
+                                        .anyMatch(preferredShift ->
+                                                preferredShift.getStartTime().isBefore(shiftAssignment.getShift().getEndTime()) &&
+                                                        preferredShift.getEndTime().isAfter(shiftAssignment.getShift().getStartTime())))
+                        .reward("Preferred shifts", HardSoftScore.ONE_SOFT)
         };
     }
 }

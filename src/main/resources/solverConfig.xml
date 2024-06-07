@@ -8,6 +8,6 @@
     </scoreDirectorFactory>
 
     <termination>
-        <spentLimit>1m</spentLimit>
+        <spentLimit>5s</spentLimit>
     </termination>
 </solver>

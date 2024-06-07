@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Objects;
 
 
 @Entity
@@ -23,4 +24,21 @@ public class Shift {
     private LocalDateTime startTime;
     private LocalDateTime endTime;
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null || getClass() != obj.getClass())
+            return false;
+
+        Shift other = (Shift) obj;
+
+        // Compare fields for equality
+        return Objects.equals(endTime, other.endTime) && Objects.equals(startTime, other.startTime);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, startTime, endTime);
+    }
 }
