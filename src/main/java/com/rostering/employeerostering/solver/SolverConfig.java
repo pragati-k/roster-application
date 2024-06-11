@@ -3,6 +3,8 @@ package com.rostering.employeerostering.solver;
 import com.rostering.employeerostering.constraint.EmployeeRosteringConstraintProvider;
 import com.rostering.employeerostering.entity.Roster;
 import com.rostering.employeerostering.entity.ShiftAssignment;
+import org.optaplanner.core.api.score.ScoreManager;
+import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScore;
 import org.optaplanner.core.api.solver.SolverFactory;
 import org.optaplanner.core.api.solver.SolverManager;
 import org.springframework.context.annotation.Bean;
@@ -22,5 +24,9 @@ public class SolverConfig {
     @Bean
     public SolverManager<Roster, UUID> solverManager(SolverFactory<Roster> solverFactory) {
         return SolverManager.create(solverFactory);
+    }
+    @Bean
+    public ScoreManager<Roster, HardSoftScore> scoreManager(SolverFactory<Roster> solverFactory) {
+        return ScoreManager.create(solverFactory);
     }
 }

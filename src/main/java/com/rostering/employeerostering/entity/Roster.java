@@ -13,6 +13,7 @@ import org.optaplanner.core.api.domain.solution.ProblemFactCollectionProperty;
 import org.optaplanner.core.api.domain.valuerange.ValueRangeProvider;
 import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScore;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @PlanningSolution
@@ -22,16 +23,23 @@ public class Roster {
 
     private List<Employee> employeeList;
 
+    private List<RequiredShifts> requiredShifts;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Shift> shiftList;
+    private List<ShiftAssignment> shiftAssignmentList = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<ShiftAssignment> shiftAssignmentList;
+    private List<Store> storeList;
 
     @PlanningScore
     private HardSoftScore score;
 
+    @ProblemFactCollectionProperty
+    public List<Store> getStoreList() {
+        return storeList;
+    }
+
+    public void setStoreList(List<Store> storeList) {
+        this.storeList =  storeList;
+    }
     @ProblemFactCollectionProperty
     @ValueRangeProvider(id = "employeeRange")
     public List<Employee> getEmployeeList() {

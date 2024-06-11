@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {Employee, Roster, Shift, ShiftAssignment} from "../roster.model";
 import {RosterService} from "../roster.service";
+import {HttpClient} from "@angular/common/http";
 
 @Component({
   selector: 'app-roster',
@@ -10,55 +11,60 @@ import {RosterService} from "../roster.service";
 export class RosterComponent {
 
   roster: Roster = { employeeList: [], shiftList: [], shiftAssignmentList:[] };
-  newEmployee: Employee = { name: '' , preferredShifts: []};
-  newPreferredShift: Shift = { startTime: '', endTime: ''};
-  newShift: Shift = { startTime: '', endTime: ''};
+  private employeeFile: File | null = null;
+  private shiftFile: File | null = null;
   problemId = '';
   message = '';
-  count = 0;
+  scoreExplanation:any;
 
-  constructor(private rosteringService: RosterService) {}
+  constructor(private http: HttpClient, private rosterService: RosterService) {}
 
-  addEmployee() {
-    this.roster.employeeList.push({ ...this.newEmployee });
-    this.newEmployee = { name: '' , preferredShifts: []};
-  }
-
-  addPreferredShift(employee: Employee) {
-    employee.preferredShifts?.push({ ...this.newPreferredShift });
-    this.newPreferredShift = { startTime: '', endTime: '' };
-  }
-
-  addShift() {
-    let newShiftAssignment = {
-      id:0,
-      shift: {startTime: '', endTime: ''}
+  onFileSelected(event: Event, fileType: string): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      if (fileType === 'employees') {
+        this.employeeFile = input.files[0];
+      } else if (fileType === 'shifts') {
+        this.shiftFile = input.files[0];
+      }
     }
-    this.roster.shiftList.push({ ...this.newShift });
-    newShiftAssignment.shift = this.newShift;
-    this.newShift = { startTime: '', endTime:''};
-    newShiftAssignment.id = this.count;
-    this.roster.shiftAssignmentList?.push(newShiftAssignment);
-    this.count++;
   }
 
-  solveRoster(){
-    console.log(this.roster);
-    this.rosteringService.solveRoster(this.roster).subscribe(solvedRoster => {
-        this.problemId = solvedRoster;
-    });
+  onSubmit(): void {
+    if (this.employeeFile && this.shiftFile) {
+      const formData: FormData = new FormData();
+      formData.append('employees', this.employeeFile, this.employeeFile.name);
+      formData.append('stores', this.shiftFile, this.shiftFile.name);
+
+      this.rosterService.solveRoster(formData).subscribe(response => {
+        this.problemId = response;
+        console.log('Files uploaded successfully');
+      }, error => {
+        console.error('Error uploading files', error);
+      });
+    } else {
+      alert('Please select both employee and shift files.');
+    }
   }
 
   getSolveRoster(){
-    this.rosteringService.getSolveRoster(this.problemId).subscribe(roster =>{
-      this.roster = roster;
-    })
-  }
+      this.rosterService.getSolveRoster(this.problemId).subscribe(roster =>{
+        this.roster = roster;
+      })
+    this.getScoreExplation();
+    }
 
-  terminateSolveRoster(){
-    this.rosteringService.terminateSolveRoster(this.problemId).subscribe(roster =>{
-      console.log(roster);
-      this.message = roster.message;
-    })
-  }
+    terminateSolveRoster(){
+      this.rosterService.terminateSolveRoster(this.problemId).subscribe(roster =>{
+        console.log(roster);
+        this.message = roster.message;
+      })
+    }
+
+    getScoreExplation(){
+      this.rosterService.getScoreExplanation(this.problemId).subscribe(response =>{
+        console.log(response);
+        this.scoreExplanation = response;
+      })
+    }
 }

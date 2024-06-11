@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import lombok.*;
 
 import java.util.List;
+import java.util.Set;
 
 
 @Getter
@@ -17,7 +18,17 @@ public class Employee {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
+    private String store_name;
+    private Set<String> skills;
+    private List<Shift> availabilities;
 
-    private List<Shift> preferredShifts;
-
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", skills=" + skills +
+                ", availabilities=" + availabilities +
+                '}';
+    }
 }
