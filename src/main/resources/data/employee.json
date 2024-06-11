@@ -1,0 +1,114 @@
+[
+  {
+    "id": 1,
+    "name": "John",
+    "store_name": "FRUITS",
+    "skills": ["CASHIER", "SELLER"],
+    "availabilities": [
+      {
+        "id": 1,
+        "days": ["MO","TU", "WE","TH","FR","SA"],
+        "startTime": "08:00",
+        "endTime": "15:00"
+      },
+      {
+        "id": 2,
+        "days": ["MO","TU","WE","TH","SA"],
+        "startTime": "15:00",
+        "endTime": "22:00"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Jane",
+    "store_name": "FRUITS",
+    "skills": ["SELLER"],
+    "availabilities": [
+      {
+        "id": 3,
+        "days": ["MO","TU", "WE","TH","FR","SA"],
+        "startTime": "17:30",
+        "endTime": "22:30"
+      },
+      {
+        "id": 4,
+        "days": ["MO","WE","TH"],
+        "startTime": "08:00",
+        "endTime": "13:00"
+      },
+      {
+        "id": 5,
+        "days": ["FR","SA"],
+        "startTime": "07:30",
+        "endTime": "15:00"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "name": "Albert",
+    "store_name": "FRUITS",
+    "skills": ["CASHIER"],
+    "availabilities": [
+      {
+        "id": 3,
+        "days": ["MO","TU", "WE","TH","FR","SA"],
+        "startTime": "15:00",
+        "endTime": "22:00"
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "name": "Michel",
+    "store_name": "FRUITS",
+    "skills": ["SELLER"],
+    "availabilities": [
+      {
+        "id": 3,
+        "days": ["MO","TU", "WE","TH","FR","SA"],
+        "startTime": "08:30",
+        "endTime": "15:10"
+      },
+      {
+        "id": 4,
+        "days": ["MO","TU","WE","TH","SA"],
+        "startTime": "15:00",
+        "endTime": "22:15"
+      },
+      {
+        "id": 4,
+        "days": ["FR"],
+        "startTime": "17:00",
+        "endTime": "22:15"
+      },
+      {
+        "id": 4,
+        "days": ["FR"],
+        "startTime": "11:00",
+        "endTime": "14:00"
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "name": "Rohan",
+    "store_name": "FRUITS",
+    "skills": ["HELPER"],
+    "availabilities": [
+      {
+        "id": 4,
+        "days": ["MO","TU", "WE","TH","FR","SA"],
+        "startTime": "17:00",
+        "endTime": "22:30"
+      },
+      {
+        "id": 4,
+        "days": ["MO","TU", "WE","TH","FR","SA"],
+        "startTime": "07:30",
+        "endTime": "15:00"
+      }
+    ]
+  }
+]

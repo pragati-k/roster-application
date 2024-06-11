@@ -12,12 +12,16 @@ export class RosterService {
 
   constructor(private http: HttpClient) { }
 
-  solveRoster(roster: Roster): Observable<string> {
-    return this.http.post<string>(`${this.apiUrl}/solve`, roster);
+  solveRoster(formData: FormData): Observable<string> {
+    return this.http.post<string>(`${this.apiUrl}/solve`, formData);
   }
 
   getSolveRoster(problemId: string): Observable<Roster> {
     return this.http.get<Roster>(`${this.apiUrl}/solution/` + problemId);
+  }
+
+  getScoreExplanation(problemId: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/score-explanation/` + problemId);
   }
 
   terminateSolveRoster(problemId: string): Observable<any> {

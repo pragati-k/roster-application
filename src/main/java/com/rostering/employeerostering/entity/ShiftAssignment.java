@@ -20,7 +20,18 @@ public class ShiftAssignment {
     @ManyToOne
     private Shift shift;
 
+    private String store_name;
+
     @PlanningVariable(valueRangeProviderRefs = "employeeRange")
     private Employee employee;
 
+    @Override
+    public String toString() {
+        return "ShiftAssignment{" +
+                "id=" + id +
+                ", shift=" + shift +
+                ", store_name='" + store_name + '\'' +
+                ", employee=" + employee +
+                '}';
+    }
 }

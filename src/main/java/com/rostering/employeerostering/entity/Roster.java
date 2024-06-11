@@ -22,16 +22,23 @@ public class Roster {
 
     private List<Employee> employeeList;
 
-
-    @OneToMany(cascade = CascadeType.ALL)
     private List<Shift> shiftList;
 
-    @OneToMany(cascade = CascadeType.ALL)
     private List<ShiftAssignment> shiftAssignmentList;
+
+    private List<Store> storeList;
 
     @PlanningScore
     private HardSoftScore score;
 
+    @ProblemFactCollectionProperty
+    public List<Store> getStoreList() {
+        return storeList;
+    }
+
+    public void setStoreList(List<Store> storeList) {
+        this.storeList =  storeList;
+    }
     @ProblemFactCollectionProperty
     @ValueRangeProvider(id = "employeeRange")
     public List<Employee> getEmployeeList() {

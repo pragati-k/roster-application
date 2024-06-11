@@ -1,66 +1,83 @@
 <div class="container">
-  <h1 class="text-center">Employee Rostering</h1>
+  <h1>Employee Rostering</h1>
   <div class="row">
-    <div class="col-6">
-      <div>
-        <h2>Add Employee</h2>
-        <input [(ngModel)]="newEmployee.name" placeholder="Employee Name">
-        <button (click)="addEmployee()">Add Employee</button>
-      </div>
-      <h2>Preferred Shifts</h2>
-      <div *ngFor="let employee of roster.employeeList">
-        <h3><b>Employee Name</b> : {{ employee.name }}</h3>
-        <div *ngFor="let shift of employee.preferredShifts">
-          <p>Start: {{ shift.startTime | date: "short" }} || End: {{ shift.endTime | date: "short"}}</p>
+    <div class="col-4">
+      <form (submit)="onSubmit()">
+        <div class="form-group">
+          <label for="employeeFile">Upload Employees.json File</label>
+          <input type="file" id="employeeFile" (change)="onFileSelected($event, 'employees')" accept=".json"/>
         </div>
-        <label>Preferred Shift Start: </label>
-        <input type="datetime-local" [(ngModel)]="newPreferredShift.startTime" placeholder="Shift Start"><br>
-        <label>Preferred Shift End: </label>
-        <input type="datetime-local" [(ngModel)]="newPreferredShift.endTime" placeholder="Shift End">
-        <button (click)="addPreferredShift(employee)">Add Preferred Shift</button>
+        <div class="form-group">
+          <label for="shiftFile">Upload Shifts.json File</label>
+          <input type="file" id="shiftFile" (change)="onFileSelected($event, 'shifts')" accept=".json"/>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+    </div>
+
+    <div class="col-8">
+      <button (click)="getSolveRoster()" class="btn btn-primary">Get Roster</button>
+      <button (click)="terminateSolveRoster()" class="btn btn-primary m-3">Terminate Roster</button>
+      <div *ngIf="roster.shiftAssignmentList">
+        <h2>Generated Roster</h2>
+        <table class="table table-bordered">
+          <tr>
+            <th>Skills</th>
+            <th>Days</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Employee</th>
+            <th>Employee skills</th>
+            <th>Employee availability</th>
+          </tr>
+          <tr *ngFor="let assignment of roster.shiftAssignmentList">
+            <td>{{assignment.shift.skills}}</td>
+            <td>{{assignment.shift.days}}</td>
+            <td>{{assignment.shift.startTime}}</td>
+            <td>{{assignment.shift.endTime}}</td>
+            <td>{{assignment.employee?.name}}</td>
+            <td>{{assignment.employee?.skills}}</td>
+            <td>
+              <li *ngFor="let availability of assignment.employee?.availabilities">
+                {{availability.days}}<br>
+                {{availability.startTime}}<br>
+                {{availability.endTime}}
+              </li>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="row">
+        <div class="col-6">
+          <h2>Score</h2>
+          <li>initScore : {{roster.score?.initScore}}</li>
+          <li>hardScore : {{roster.score?.hardScore}}</li>
+          <li>softScore : {{roster.score?.softScore}}</li>
+          <li>feasible : {{roster.score?.feasible}}</li>
+          <li>solutionInitialized : {{roster.score?.solutionInitialized}}</li>
+          <li>zero : {{roster.score?.zero}}</li>
+        </div>
+        <div class="col-6">
+            <h1>Score Explanation</h1>
+            <div *ngIf="scoreExplanation">
+              <p>Score: {{ scoreExplanation.score }}</p>
+              <div *ngFor="let constraint of scoreExplanation.constraintMatchTotals">
+                <h3>constraintName : {{ constraint.constraintName }}</h3>
+                <p>Score: {{ constraint.score }}</p>
+                <ul>
+                  <li *ngFor="let match of constraint.constraintMatches">
+                    <b>Justification:</b> {{ match.justification }}
+                    <ol><b>Score:</b> {{ match.score }}</ol>
+                  </li>
+                </ul>
+              </div>
+          </div>
+        </div>
       </div>
 
       <div>
-        <h2>Add Shift</h2>
-        <input type="datetime-local" [(ngModel)]="newShift.startTime" placeholder="Start Time">
-        <input type="datetime-local" [(ngModel)]="newShift.endTime" placeholder="End Time">
-        <button (click)="addShift()">Add Shift</button>
+        {{message}}
       </div>
-
-      <div>
-        <h2>Shift List</h2>
-        <ul>
-          <li *ngFor="let shift of roster.shiftList">
-            {{ shift.startTime | date: "short"}} - {{ shift.endTime | date: "short" }}
-          </li>
-        </ul>
-      </div>
-    </div>
-    <div class="col-6">
-    <button (click)="solveRoster()">Generate Roster</button>
-    <button (click)="getSolveRoster()">Get Roster</button>
-    <button (click)="terminateSolveRoster()">Terminate Roster</button>
-    <div *ngIf="roster.shiftAssignmentList">
-      <h2>Generated Roster</h2>
-      <ul>
-        <li *ngFor="let assignment of roster.shiftAssignmentList">
-          {{ assignment.shift.startTime | date : "short"}} - {{ assignment.shift.endTime |  date : "short" }}
-          : {{ assignment.employee?.name || 'Unassigned' }}
-        </li>
-      </ul>
-    </div>
-      <div>
-        <h2>Score</h2>
-        <li>initScore : {{roster.score?.initScore}}</li>
-        <li>hardScore : {{roster.score?.hardScore}}</li>
-        <li>softScore : {{roster.score?.softScore}}</li>
-        <li>feasible : {{roster.score?.feasible}}</li>
-        <li>solutionInitialized : {{roster.score?.solutionInitialized}}</li>
-        <li>zero : {{roster.score?.zero}}</li>
-      </div>
-    <div>
-      {{message}}
-    </div>
     </div>
   </div>
 </div>

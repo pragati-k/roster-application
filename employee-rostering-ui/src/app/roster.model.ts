@@ -1,11 +1,14 @@
 export interface Employee {
   id?: number;
   name: string;
-  preferredShifts?: Shift[];
+  skills: string[];
+  availabilities?: Shift[];
 }
 
 export interface Shift {
   id?: number;
+  skills: string[];
+  days: string[];
   startTime: string;
   endTime: string;
 }
