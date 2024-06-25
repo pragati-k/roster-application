@@ -4,8 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.rostering.employeerostering.dto.ConstraintMatchDTO;
 import com.rostering.employeerostering.dto.ConstraintMatchTotalDTO;
+import com.rostering.employeerostering.dto.EmployeeDTO;
 import com.rostering.employeerostering.dto.ScoreExplanationDTO;
 import com.rostering.employeerostering.entity.*;
+import com.rostering.employeerostering.service.ShiftGenerator;
 import lombok.Getter;
 import lombok.Setter;
 import org.optaplanner.core.api.score.ScoreExplanation;
@@ -40,13 +42,15 @@ public class RosteringController {
 
     @Autowired
     private ScoreManager<Roster, HardSoftScore> scoreManager;
+
+    @Autowired
+    private ShiftGenerator shiftGenerator;
     private final ConcurrentMap<UUID, SolverJob<Roster, UUID>> solverJobMap = new ConcurrentHashMap<>();
 
     private final ConcurrentMap<UUID, Roster> bestSolutionMap = new ConcurrentHashMap<>();
 
 
     @PostMapping("/solve")
-//    public UUID solveRoster(@RequestBody Roster roster) throws IOException {
     public UUID solveRoster(@RequestParam("employees") MultipartFile employeesFile,
                             @RequestParam("stores") MultipartFile storeFile) throws IOException {
 
@@ -72,6 +76,13 @@ public class RosteringController {
 
     @GetMapping("/solution/{problemId}")
     public Roster getSolution(@PathVariable UUID problemId) {
+        Roster solution = bestSolutionMap.get(problemId);
+        for (ShiftAssignment shiftAssignment : solution.getShiftAssignmentList()) {
+            if (shiftAssignment.getEmployee() != null && shiftAssignment.getEmployee().size() != 0) {
+                System.out.println(shiftAssignment.getDateShift());
+                System.out.println(shiftAssignment.getEmployee());
+            }
+        }
         return bestSolutionMap.get(problemId);
     }
 
@@ -124,31 +135,32 @@ public class RosteringController {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
 
-        // Load employees
-//        ClassPathResource employeesResource = new ClassPathResource("data/employee.json");
-        List<Employee> employees = Arrays.asList(objectMapper.readValue(employeesFile.getInputStream(), Employee[].class));
+        List<EmployeeDTO> employeesDTO = Arrays.asList(objectMapper.readValue(employeesFile.getInputStream(), EmployeeDTO[].class));
+        ClassPathResource scheduleModelsResource = new ClassPathResource("data/ScheduleModels.json");
+        List<ScheduleModel> scheduleModels = Arrays.asList(objectMapper.readValue(scheduleModelsResource.getInputStream(), ScheduleModel[].class));
 
-        // Load stores
-//        ClassPathResource shiftsResource = new ClassPathResource("data/store.json");
-//        List<Shift> shifts = Arrays.asList(objectMapper.readValue(storeFile.getInputStream(), Shift[].class));
+        List<Employee> employees = new ArrayList<>();
+        for (EmployeeDTO employeeDTO2 : employeesDTO) {
+            List<ScheduleModel> employeeScheduleModel = scheduleModels.stream().filter(item -> employeeDTO2.getScheduleModelIds().contains(item.getShiftPatternId())).collect(Collectors.toList());
+            employees.add(new Employee(employeeDTO2.getWorkerId(), employeeDTO2.getName(), employeeDTO2.getPosition(), employeeDTO2.getAssignedStoreId(), employeeDTO2.getContactInfo(), employeeScheduleModel));
+        }
 
         List<Store> stores = Arrays.asList(objectMapper.readValue(storeFile.getInputStream(), Store[].class));
+
         Roster roster = new Roster();
         roster.setEmployeeList(employees);
         List<ShiftAssignment> shiftAssignmentList = new ArrayList<>();
         int i = 0;
-        for(Store s: stores){
-            roster.setRequiredShifts(s.getRequired_shifts());
-//            for (int i = 0; i < s.getRequired_shifts().size(); i++) {
-                for (RequiredShifts requiredShifts: s.getRequired_shifts()) {
-                    for (Shift shift: requiredShifts.getShifts()) {
-                        ShiftAssignment shiftAssignment = new ShiftAssignment();
-                        shiftAssignment.setId(i);
-                        shiftAssignment.setStore_name(s.getName());
-                        shiftAssignment.setShift_type(requiredShifts.getShift_type());
-                        shiftAssignment.setShift(shift);
-                        shiftAssignmentList.add(shiftAssignment);
-                        i++;
+        for (Store s : stores) {
+            for (WorkerRequirement workerRequirement : s.getWorkerRequirement()) {
+                List<DateShift> dateShifts = ShiftGenerator.start(workerRequirement);
+                for (DateShift shift : dateShifts) {
+                    ShiftAssignment shiftAssignment = new ShiftAssignment();
+                    shiftAssignment.setId(i);
+                    shiftAssignment.setStore_name(s.getName());
+                    shiftAssignment.setDateShift(shift);
+                    shiftAssignmentList.add(shiftAssignment);
+                    i++;
                 }
             }
         }

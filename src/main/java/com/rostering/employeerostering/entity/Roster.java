@@ -1,10 +1,7 @@
 package com.rostering.employeerostering.entity;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.OneToMany;
-import lombok.Builder;
+
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.optaplanner.core.api.domain.solution.PlanningEntityCollectionProperty;
 import org.optaplanner.core.api.domain.solution.PlanningScore;
@@ -22,8 +19,6 @@ import java.util.List;
 public class Roster {
 
     private List<Employee> employeeList;
-
-    private List<RequiredShifts> requiredShifts;
 
     private List<ShiftAssignment> shiftAssignmentList = new ArrayList<>();
 

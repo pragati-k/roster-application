@@ -1,12 +1,10 @@
 package com.rostering.employeerostering.entity;
 
-import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.optaplanner.core.api.domain.entity.PlanningEntity;
 import org.optaplanner.core.api.domain.lookup.PlanningId;
 import org.optaplanner.core.api.domain.variable.PlanningListVariable;
-import org.optaplanner.core.api.domain.variable.PlanningVariable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,16 +14,13 @@ import java.util.List;
 @Setter
 @PlanningEntity
 public class ShiftAssignment {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     @PlanningId
     private Integer id;
 
-    @ManyToOne
-    private Shift shift;
+    private DateShift dateShift;
 
     private String store_name;
-    private String shift_type;
 
     @PlanningListVariable(valueRangeProviderRefs = "employeeRange")
     private List<Employee> employee = new ArrayList<>();
@@ -34,7 +29,7 @@ public class ShiftAssignment {
     public String toString() {
         return "ShiftAssignment{" +
                 "id=" + id +
-                ", shift=" + shift +
+                ", dateShift=" + dateShift +
                 ", store_name='" + store_name + '\'' +
                 ", employee=" + employee +
                 '}';

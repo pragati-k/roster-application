@@ -9,9 +9,11 @@ import java.util.List;
 @Getter
 @Setter
 public class Store {
+    private int storeId;
     private String name;
-    private List<LocalTime> store_hours;
-    private List<RequiredShifts> required_shifts;
+    private Integer parentStoreId;
+    private List<LocalTime> storeHours;
+    private List<WorkerRequirement> workerRequirement;
 
 
 }

@@ -13,21 +13,32 @@ import java.util.Set;
 @Getter
 @Setter
 public class Employee {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+
+    private String workerId;
     private String name;
-    private String store_name;
-    private Set<String> skills;
-    private List<Shift> availabilities;
+    private List<String> position;
+    private int assignedStoreId;
+    private ContactInfo contactInfo;
+    private List<ScheduleModel> scheduleModel;
+
+
+    public Employee(String workerId, String name, List<String> position, int assignedStoreId, ContactInfo contactInfo, List<ScheduleModel> scheduleModel) {
+        this.workerId = workerId;
+        this.name = name;
+        this.position = position;
+        this.assignedStoreId = assignedStoreId;
+        this.contactInfo = contactInfo;
+        this.scheduleModel = scheduleModel;
+    }
 
     @Override
     public String toString() {
         return "Employee{" +
-                "id=" + id +
+                "id='" + workerId + '\'' +
                 ", name='" + name + '\'' +
-                ", skills=" + skills +
-                ", availabilities=" + availabilities +
+                ", positions=" + position +
+                ", assignedStoreId=" + assignedStoreId +
+                ", scheduleModelIds=" + scheduleModel +
                 '}';
     }
 }

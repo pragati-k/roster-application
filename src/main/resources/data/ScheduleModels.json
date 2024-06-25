@@ -1,0 +1,544 @@
+[
+    {
+      "shiftPatternId": 1,
+      "name": "First - 1",
+      "applyShiftOnHoliday": "True",
+      "applyPatternFrom": "Monday",
+      "durationPattern": {
+        "days": "7 days",
+        "shiftType": [
+          [
+            {
+              "id": 1,
+              "name": "Morning 10:00 AM to 2:00 PM",
+              "abbreviation": "1A1",
+              "timings": [
+                {
+                  "start": "07:30",
+                  "end": "12:30",
+                  "totalLength": "05:00",
+                  "effectiveWork": "04:00"
+                }
+              ]
+            }
+          ],
+          [
+            {
+              "id": 1,
+              "name": "Morning 10:00 AM to 2:00 PM",
+              "abbreviation": "1A1",
+              "timings": [
+                {
+                  "start": "07:30",
+                  "end": "12:30",
+                  "totalLength": "05:00",
+                  "effectiveWork": "04:00"
+                }
+              ]
+            },
+            {
+              "id": 2,
+              "name": "Morning 10:00 AM to 2:00 PM",
+              "abbreviation": "1A3",
+              "timings": [
+                {
+                  "start": "18:00",
+                  "end": "21:00",
+                  "totalLength": "03:00",
+                  "effectiveWork": "03:00"
+                }
+              ]
+            }
+          ],
+          [
+            {
+              "id": 3,
+              "name": "Morning 10:00 AM to 2:00 PM",
+              "abbreviation": "1B2",
+              "timings": [
+                {
+                  "start": "09:15",
+                  "end": "14:15",
+                  "totalLength": "05:00",
+                  "effectiveWork": "04:00"
+                }
+              ]
+            }
+          ],
+          [
+            {
+              "id": 1,
+              "name": "Morning 10:00 AM to 2:00 PM",
+              "abbreviation": "1A1",
+              "timings": [
+                {
+                  "start": "07:30",
+                  "end": "12:30",
+                  "totalLength": "05:00",
+                  "effectiveWork": "04:00"
+                }
+              ]
+            },
+            {
+              "id": 2,
+              "name": "Morning 10:00 AM to 2:00 PM",
+              "abbreviation": "1A3",
+              "timings": [
+                {
+                  "start": "18:00",
+                  "end": "21:00",
+                  "totalLength": "03:00",
+                  "effectiveWork": "03:00"
+                }
+              ]
+            }
+          ],
+          [
+            {
+              "id": 3,
+              "name": "Morning 10:00 AM to 2:00 PM",
+              "abbreviation": "1B2",
+              "timings": [
+                {
+                  "start": "09:15",
+                  "end": "14:15",
+                  "totalLength": "05:00",
+                  "effectiveWork": "04:00"
+                }
+              ]
+            }
+          ],
+          [
+            {
+              "id": 1,
+              "name": "Morning 10:00 AM to 2:00 PM",
+              "abbreviation": "1A1",
+              "timings": [
+                {
+                  "start": "07:30",
+                  "end": "12:30",
+                  "totalLength": "05:00",
+                  "effectiveWork": "04:00"
+                }
+              ]
+            },
+            {
+              "id": 2,
+              "name": "Morning 10:00 AM to 2:00 PM",
+              "abbreviation": "1A3",
+              "timings": [
+                {
+                  "start": "18:00",
+                  "end": "21:00",
+                  "totalLength": "03:00",
+                  "effectiveWork": "03:00"
+                }
+              ]
+            }
+          ],
+          [
+            {
+              "id": 4,
+              "name": "Absent",
+              "abbreviation": "ABS",
+              "timings": [
+                {
+                  "start": "00:00",
+                  "end": "00:00",
+                  "totalLength": "00:00",
+                  "effectiveWork": "00:00"
+                }
+              ]
+            }
+          ]
+        ]
+      }
+    },
+    {
+      "shiftPatternId": 2,
+      "name": "First - 2",
+      "applyShiftOnHoliday": "True",
+      "applyPatternFrom": "Monday",
+      "durationPattern": {
+        "days": "7 days",
+        "shiftType": [
+          [
+            {
+              "id": 1,
+              "name": "Morning 10:00 AM to 2:00 PM",
+              "abbreviation": "1A1",
+              "timings": [
+                {
+                  "start": "07:30",
+                  "end": "12:30",
+                  "totalLength": "05:00",
+                  "effectiveWork": "04:00"
+                }
+              ]
+            },
+            {
+              "id": 2,
+              "name": "Morning 10:00 AM to 2:00 PM",
+              "abbreviation": "1A3",
+              "timings": [
+                {
+                  "start": "18:00",
+                  "end": "21:00",
+                  "totalLength": "03:00",
+                  "effectiveWork": "03:00"
+                }
+              ]
+            }
+          ],
+          [
+            {
+              "id": 3,
+              "name": "Morning 10:00 AM to 2:00 PM",
+              "abbreviation": "1B2",
+              "timings": [
+                {
+                  "start": "09:15",
+                  "end": "14:15",
+                  "totalLength": "05:00",
+                  "effectiveWork": "04:00"
+                }
+              ]
+            }
+          ],
+          [
+            {
+              "id": 1,
+              "name": "Morning 10:00 AM to 2:00 PM",
+              "abbreviation": "1A1",
+              "timings": [
+                {
+                  "start": "07:30",
+                  "end": "12:30",
+                  "totalLength": "05:00",
+                  "effectiveWork": "04:00"
+                }
+              ]
+            },
+            {
+              "id": 2,
+              "name": "Morning 10:00 AM to 2:00 PM",
+              "abbreviation": "1A3",
+              "timings": [
+                {
+                  "start": "18:00",
+                  "end": "21:00",
+                  "totalLength": "03:00",
+                  "effectiveWork": "03:00"
+                }
+              ]
+            }
+          ],
+          [
+            {
+              "id": 3,
+              "name": "Morning 10:00 AM to 2:00 PM",
+              "abbreviation": "1B2",
+              "timings": [
+                {
+                  "start": "09:15",
+                  "end": "14:15",
+                  "totalLength": "05:00",
+                  "effectiveWork": "04:00"
+                }
+              ]
+            }
+          ],
+          [
+            {
+              "id": 1,
+              "name": "Morning 10:00 AM to 2:00 PM",
+              "abbreviation": "1A1",
+              "timings": [
+                {
+                  "start": "07:30",
+                  "end": "12:30",
+                  "totalLength": "05:00",
+                  "effectiveWork": "04:00"
+                }
+              ]
+            },
+            {
+              "id": 2,
+              "name": "Morning 10:00 AM to 2:00 PM",
+              "abbreviation": "1A3",
+              "timings": [
+                {
+                  "start": "18:00",
+                  "end": "21:00",
+                  "totalLength": "03:00",
+                  "effectiveWork": "03:00"
+                }
+              ]
+            }
+          ],
+          [
+            {
+              "id": 3,
+              "name": "Morning 10:00 AM to 2:00 PM",
+              "abbreviation": "1B2",
+              "timings": [
+                {
+                  "start": "09:15",
+                  "end": "14:15",
+                  "totalLength": "05:00",
+                  "effectiveWork": "04:00"
+                }
+              ]
+            }
+          ],
+          [
+            {
+              "id": 4,
+              "name": "Absent",
+              "abbreviation": "ABS",
+              "timings": [
+                {
+                  "start": "00:00",
+                  "end": "00:00",
+                  "totalLength": "00:00",
+                  "effectiveWork": "00:00"
+                }
+              ]
+            }
+          ]
+        ]
+      }
+    },
+    {
+      "shiftPatternId": 3,
+      "name": "Thirtythree - 1",
+      "applyShiftOnHoliday": "True",
+      "applyPatternFrom": "Monday",
+      "durationPattern": {
+        "days": "7 days",
+        "shiftType": [
+          [
+            {
+              "id": 1,
+              "name": "Morning 10:00 AM to 2:00 PM",
+              "abbreviation": "1A1",
+              "timings": [
+                {
+                  "start": "09:00",
+                  "end": "14:45",
+                  "totalLength": "05:00",
+                  "effectiveWork": "04:00"
+                }
+              ]
+            }
+          ],
+          [
+            {
+              "id": 1,
+              "name": "Morning 10:00 AM to 2:00 PM",
+              "abbreviation": "1A1",
+              "timings": [
+                {
+                  "start": "09:00",
+                  "end": "14:45",
+                  "totalLength": "05:00",
+                  "effectiveWork": "04:00"
+                }
+              ]
+            }
+          ],
+          [
+            {
+              "id": 3,
+              "name": "Morning 10:00 AM to 2:00 PM",
+              "abbreviation": "1B2",
+              "timings": [
+                {
+                  "start": "09:00",
+                  "end": "14:45",
+                  "totalLength": "05:00",
+                  "effectiveWork": "04:00"
+                }
+              ]
+            }
+          ],
+          [
+            {
+              "id": 1,
+              "name": "Morning 10:00 AM to 2:00 PM",
+              "abbreviation": "1A1",
+              "timings": [
+                {
+                  "start": "09:00",
+                  "end": "14:45",
+                  "totalLength": "05:00",
+                  "effectiveWork": "04:00"
+                }
+              ]
+            }
+          ],
+          [
+            {
+              "id": 3,
+              "name": "Morning 10:00 AM to 2:00 PM",
+              "abbreviation": "1B2",
+              "timings": [
+                {
+                  "start": "09:00",
+                  "end": "14:45",
+                  "totalLength": "05:00",
+                  "effectiveWork": "04:00"
+                }
+              ]
+            }
+          ],
+          [
+            {
+              "id": 4,
+              "name": "Absent",
+              "abbreviation": "ABS",
+              "timings": [
+                {
+                  "start": "00:00",
+                  "end": "00:00",
+                  "totalLength": "00:00",
+                  "effectiveWork": "00:00"
+                }
+              ]
+            }
+          ],
+          [
+            {
+              "id": 4,
+              "name": "Absent",
+              "abbreviation": "ABS",
+              "timings": [
+                {
+                  "start": "00:00",
+                  "end": "00:00",
+                  "totalLength": "00:00",
+                  "effectiveWork": "00:00"
+                }
+              ]
+            }
+          ]
+        ]
+      }
+    },
+    {
+      "shiftPatternId": 4,
+      "name": "Thirtythree - 2",
+      "applyShiftOnHoliday": "True",
+      "applyPatternFrom": "Monday",
+      "durationPattern": {
+        "days": "7 days",
+        "shiftType": [
+          [
+            {
+              "id": 1,
+              "name": "Morning 10:00 AM to 2:00 PM",
+              "abbreviation": "1A1",
+              "timings": [
+                {
+                  "start": "18:30",
+                  "end": "10:30",
+                  "totalLength": "05:00",
+                  "effectiveWork": "04:00"
+                }
+              ]
+            }
+          ],
+          [
+            {
+              "id": 1,
+              "name": "Morning 10:00 AM to 2:00 PM",
+              "abbreviation": "1A1",
+              "timings": [
+                {
+                  "start": "18:30",
+                  "end": "10:30",
+                  "totalLength": "05:00",
+                  "effectiveWork": "04:00"
+                }
+              ]
+            }
+          ],
+          [
+            {
+              "id": 3,
+              "name": "Morning 10:00 AM to 2:00 PM",
+              "abbreviation": "1B2",
+              "timings": [
+                {
+                  "start": "18:30",
+                  "end": "10:30",
+                  "totalLength": "05:00",
+                  "effectiveWork": "04:00"
+                }
+              ]
+            }
+          ],
+          [
+            {
+              "id": 1,
+              "name": "Morning 10:00 AM to 2:00 PM",
+              "abbreviation": "1A1",
+              "timings": [
+                {
+                  "start": "18:30",
+                  "end": "10:30",
+                  "totalLength": "05:00",
+                  "effectiveWork": "04:00"
+                }
+              ]
+            }
+          ],
+          [
+            {
+              "id": 3,
+              "name": "Morning 10:00 AM to 2:00 PM",
+              "abbreviation": "1B2",
+              "timings": [
+                {
+                  "start": "17:30",
+                  "end": "10:30",
+                  "totalLength": "05:00",
+                  "effectiveWork": "04:00"
+                }
+              ]
+            }
+          ],
+          [
+            {
+              "id": 3,
+              "name": "Morning 10:00 AM to 2:00 PM",
+              "abbreviation": "1B2",
+              "timings": [
+                {
+                  "start": "17:30",
+                  "end": "10:30",
+                  "totalLength": "05:00",
+                  "effectiveWork": "04:00"
+                }
+              ]
+            }
+          ],
+          [
+            {
+              "id": 4,
+              "name": "Absent",
+              "abbreviation": "ABS",
+              "timings": [
+                {
+                  "start": "00:00",
+                  "end": "00:00",
+                  "totalLength": "00:00",
+                  "effectiveWork": "00:00"
+                }
+              ]
+            }
+          ]
+        ]
+      }
+    }
+  ]
