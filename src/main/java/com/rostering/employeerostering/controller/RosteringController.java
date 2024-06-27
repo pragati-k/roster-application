@@ -78,7 +78,7 @@ public class RosteringController {
     public Roster getSolution(@PathVariable UUID problemId) {
         Roster solution = bestSolutionMap.get(problemId);
         for (ShiftAssignment shiftAssignment : solution.getShiftAssignmentList()) {
-            if (shiftAssignment.getEmployee() != null && shiftAssignment.getEmployee().size() != 0) {
+            if (shiftAssignment.getEmployee() != null) {
                 System.out.println(shiftAssignment.getDateShift());
                 System.out.println(shiftAssignment.getEmployee());
             }
@@ -155,12 +155,16 @@ public class RosteringController {
             for (WorkerRequirement workerRequirement : s.getWorkerRequirement()) {
                 List<DateShift> dateShifts = ShiftGenerator.start(workerRequirement);
                 for (DateShift shift : dateShifts) {
-                    ShiftAssignment shiftAssignment = new ShiftAssignment();
-                    shiftAssignment.setId(i);
-                    shiftAssignment.setStore_name(s.getName());
-                    shiftAssignment.setDateShift(shift);
-                    shiftAssignmentList.add(shiftAssignment);
-                    i++;
+                    int totalRequried = shift.getRequired();
+                    for(int requriedNumber = 0; requriedNumber < totalRequried; requriedNumber++){
+                        ShiftAssignment shiftAssignment = new ShiftAssignment();
+                        shiftAssignment.setId(i);
+                        shiftAssignment.setStore_id(s.getStoreId());
+                        shift.setRequired(1);
+                        shiftAssignment.setDateShift(shift);
+                        shiftAssignmentList.add(shiftAssignment);
+                        i++;
+                    }
                 }
             }
         }

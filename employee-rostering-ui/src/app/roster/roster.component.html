@@ -23,7 +23,7 @@
       <div>
         {{message}}
       </div>
-      <div *ngIf="roster.shiftAssignmentList">
+            <div *ngIf="roster.shiftAssignmentList">
         <h2>Generated Roster</h2>
         <table class="table table-bordered">
           <tr>
@@ -37,11 +37,11 @@
           </tr>
           <tr *ngFor="let assignment of roster.shiftAssignmentList">
             <td>{{assignment.id}}</td>
-            <td>{{assignment.shift.skills}}</td>
-            <td>{{assignment.shift.days}}</td>
-            <td>{{assignment.shift.startTime}}</td>
-            <td>{{assignment.shift.endTime}}</td>
-            <td>{{assignment.shift.employee_required}}</td>
+            <td>{{assignment.dateShift.type}}</td>
+            <td>{{assignment.dateShift.day}}</td>
+            <td>{{assignment.dateShift.startTime}}</td>
+            <td>{{assignment.dateShift.endTime}}</td>
+            <td>{{assignment.dateShift.required}}</td>
             <td colspan="2">
               <table class="table-bordered inner-table" style="width: 100%;">
                 <tr>
@@ -49,13 +49,19 @@
                   <th>Skills</th>
                   <th>Start time -- End Time</th>
                 </tr>
-                <tr *ngFor="let employee of assignment.employee">
-                  <td>{{employee.name}}</td>
-                  <td>{{employee.skills}}</td>
+                <tr><td>{{assignment.employee?.name}}</td>
+                  <td>{{assignment.employee?.position}}</td>
                   <td>
-                    <p *ngFor="let availabilities of employee.availabilities">
-                      {{availabilities.startTime}} -- {{availabilities.endTime}}
-                    </p>
+                    <div *ngFor="let model of assignment.employee?.scheduleModel">
+                      <div *ngFor="let shiftTypes of model.durationPattern.shiftType">
+                        <div *ngFor="let shift of shiftTypes">
+                          <div *ngFor="let timing of shift.timings">
+                            <p>Time: {{timing.start}} - {{timing.end}}</p>
+                          </div>
+                          <hr>
+                        </div>
+                      </div>
+                    </div>
                   </td>
                 </tr>
               </table>

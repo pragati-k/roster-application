@@ -13,4 +13,14 @@ public class ShiftType {
     private String name;
     private String abbreviation;
     private List<ShiftTiming> timings;
+
+    @Override
+    public String toString() {
+        return "ShiftType{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", abbreviation='" + abbreviation + '\'' +
+                ", timings=" + timings +
+                '}';
+    }
 }

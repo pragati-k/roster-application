@@ -6,4 +6,8 @@
     <scoreDirectorFactory>
         <constraintProviderClass>com.rostering.employeerostering.constraint.EmployeeRosteringConstraintProvider</constraintProviderClass>
     </scoreDirectorFactory>
+
+    <termination>
+        <spentLimit>60s</spentLimit>
+    </termination>
 </solver>

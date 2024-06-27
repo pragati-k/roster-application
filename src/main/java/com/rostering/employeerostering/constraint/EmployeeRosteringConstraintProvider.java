@@ -12,14 +12,18 @@ public class EmployeeRosteringConstraintProvider implements ConstraintProvider {
     @Override
     public Constraint[] defineConstraints(ConstraintFactory constraintFactory) {
         return new Constraint[]{
-                constraintFactory.forEach(ShiftAssignment.class)
-                        .filter(shiftAssignment -> shiftAssignment.getEmployee() == null || shiftAssignment.getEmployee().isEmpty())
-                        .penalize("Each shift must have an employee assigned", HardSoftScore.ofHard(10)),
-//                employeeConflict(constraintFactory),
-//                employeeSkillMatch(constraintFactory),
+                constraintFactory.forEachIncludingNullVars(ShiftAssignment.class)
+                        .filter(shiftAssignment -> shiftAssignment.getEmployee() == null)
+                        .penalize("Each shift must have an employee assigned", HardSoftScore.ONE_HARD),
+                employeeConflict(constraintFactory),
+                sameShiftForWeek(constraintFactory),
                 employeeAvailability(constraintFactory),
-////              employeeStoreAssignmentConstraint(constraintFactory),
-//                shiftEmployeeCountConstraint(constraintFactory)
+                employeeSkillMatch(constraintFactory),
+                employeeStoreAssignmentConstraint(constraintFactory),
+
+//                shiftEmployeeCountConstraint(constraintFactory),
+//                oneShiftPerDay(constraintFactory),
+
         };
     }
 
@@ -27,18 +31,10 @@ public class EmployeeRosteringConstraintProvider implements ConstraintProvider {
     private Constraint employeeConflict(ConstraintFactory constraintFactory) {
         return constraintFactory.forEach(ShiftAssignment.class)
                 .join(ShiftAssignment.class,
-                        Joiners.lessThan(ShiftAssignment::getId)) // Prevent duplicate pairings
-                .filter((assignment1, assignment2) -> {
-                    for (Employee employee1 : assignment1.getEmployee()) {
-                        for (Employee employee2 : assignment2.getEmployee()) {
-                            if (employee1.equals(employee2) && overlaps(assignment1.getDateShift(), assignment2.getDateShift())) {
-                                return true;
-                            }
-                        }
-                    }
-                    return false;
-                })
-                .penalize("Employee conflict - overlapping shifts", HardSoftScore.ONE_HARD);
+                        Joiners.equal(ShiftAssignment::getEmployee),
+                        Joiners.lessThan(ShiftAssignment::getId)) // Avoid duplicate pairings and self-joins
+                .filter((assignment1, assignment2) -> overlaps(assignment1.getDateShift(), assignment2.getDateShift()))
+                .penalize("Overlapping shifts", HardSoftScore.ONE_HARD);
     }
 
     private boolean overlaps(DateShift shift1, DateShift shift2) {
@@ -48,15 +44,13 @@ public class EmployeeRosteringConstraintProvider implements ConstraintProvider {
 
     private Constraint employeeSkillMatch(ConstraintFactory constraintFactory) {
         return constraintFactory.forEach(ShiftAssignment.class)
-                .filter(assignment -> assignment.getEmployee().stream()
-                        .anyMatch(employee -> !employee.getPosition().containsAll(Collections.singleton(assignment.getDateShift().getType()))))
+                .filter(assignment -> !assignment.getEmployee().getPosition().contains(assignment.getDateShift().getType()))
                 .penalize("Employee skill mismatch", HardSoftScore.ONE_HARD);
     }
 
     private Constraint employeeAvailability(ConstraintFactory constraintFactory) {
         return constraintFactory.forEach(ShiftAssignment.class)
-                .filter(assignment -> assignment.getEmployee().stream()
-                        .anyMatch(employee -> !isAvailable(assignment, employee)))
+                .filter(assignment -> !isAvailable(assignment, assignment.getEmployee()))
                 .penalize("Employee not available", HardSoftScore.ONE_HARD);
     }
 
@@ -69,18 +63,44 @@ public class EmployeeRosteringConstraintProvider implements ConstraintProvider {
     }
 
 
-//    private Constraint employeeStoreAssignmentConstraint(ConstraintFactory constraintFactory) {
-//        return constraintFactory.forEach(ShiftAssignment.class)
-//                .filter(shiftAssignment -> shiftAssignment.getEmployee().stream()
-//                        .anyMatch(employee -> employee.getAssignedStoreId() != shiftAssignment.getId()))
-//                .penalize("Employee store assignment conflict", HardSoftScore.ONE_HARD);
+    private Constraint employeeStoreAssignmentConstraint(ConstraintFactory constraintFactory) {
+        return constraintFactory.forEach(ShiftAssignment.class)
+                .filter(shiftAssignment -> shiftAssignment.getEmployee().getAssignedStoreId() != shiftAssignment.getStore_id())
+                .penalize("Employee store assignment conflict", HardSoftScore.ONE_HARD);
+    }
+
+//    private Constraint shiftEmployeeCountConstraint(ConstraintFactory constraintFactory) {
+//        return constraintFactory
+//                .forEach(ShiftAssignment.class)
+//                .filter(shiftAssignment -> shiftAssignment.getEmployee().size() != shiftAssignment.getDateShift().getRequired())
+//                .penalize("Incorrect employee count", HardSoftScore.ONE_HARD,
+//                        shiftAssignment -> Math.abs(shiftAssignment.getDateShift().getRequired() - shiftAssignment.getEmployee().size()));
 //    }
 
-    private Constraint shiftEmployeeCountConstraint(ConstraintFactory constraintFactory) {
-        return constraintFactory
-                .forEach(ShiftAssignment.class)
-                .filter(shiftAssignment -> shiftAssignment.getEmployee().size() != shiftAssignment.getDateShift().getRequired())
-                .penalize("Incorrect employee count", HardSoftScore.ONE_HARD,
-                        shiftAssignment -> Math.abs(shiftAssignment.getDateShift().getRequired() - shiftAssignment.getEmployee().size()));
+//    private  Constraint oneShiftPerDay(ConstraintFactory constraintFactory) {
+//
+//        return constraintFactory.forEach(ShiftAssignment.class)
+//                .filter(shiftAssignment -> !shiftAssignment.getEmployee().isEmpty())
+//                .join(ShiftAssignment.class,
+//                        Joiners.equal(ShiftAssignment::getEmployee),
+//                        Joiners.equal(assignment -> assignment.getDateShift().getDate()),
+//                        Joiners.lessThan(ShiftAssignment::getId)) // To avoid duplicate pairings
+//                .penalize("One shift per day per employee", HardSoftScore.ONE_HARD);
+//    }
+
+    private Constraint sameShiftForWeek(ConstraintFactory constraintFactory) {
+        return constraintFactory.forEach(ShiftAssignment.class)
+                .join(ShiftAssignment.class,
+                        Joiners.equal(ShiftAssignment::getEmployee),
+                        Joiners.lessThan(ShiftAssignment::getId)) // To avoid duplicate pairings
+                .filter((assignment1, assignment2) -> {
+                    // Check if the shifts are at the same time but on different days
+                    DateShift shift1 = assignment1.getDateShift();
+                    DateShift shift2 = assignment2.getDateShift();
+                    return !shift1.getDate().equals(shift2.getDate()) &&
+                            shift1.getStartTime().equals(shift2.getStartTime()) &&
+                            shift1.getEndTime().equals(shift2.getEndTime());
+                })
+                .reward("Same shift for the week", HardSoftScore.ONE_SOFT);
     }
 }

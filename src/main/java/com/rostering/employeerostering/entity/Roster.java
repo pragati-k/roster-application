@@ -1,8 +1,6 @@
 package com.rostering.employeerostering.entity;
 
 
-import lombok.Getter;
-import lombok.Setter;
 import org.optaplanner.core.api.domain.solution.PlanningEntityCollectionProperty;
 import org.optaplanner.core.api.domain.solution.PlanningScore;
 import org.optaplanner.core.api.domain.solution.PlanningSolution;
@@ -14,8 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @PlanningSolution
-@Getter
-@Setter
 public class Roster {
 
     private List<Employee> employeeList;
@@ -51,5 +47,13 @@ public class Roster {
 
     public void setShiftAssignmentList(List<ShiftAssignment> shiftAssignmentList) {
         this.shiftAssignmentList = shiftAssignmentList;
+    }
+
+    public HardSoftScore getScore() {
+        return score;
+    }
+
+    public void setScore(HardSoftScore score) {
+        this.score = score;
     }
 }

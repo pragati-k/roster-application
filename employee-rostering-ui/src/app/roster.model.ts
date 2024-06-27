@@ -1,10 +1,18 @@
 export interface Employee {
-  id?: number;
+  workerId?: number;
   name: string;
-  skills: string[];
-  availabilities?: Shift[];
+  position: string[];
+  assignedStoreId: number;
+  contactInfo: ContactInfo;
+  scheduleModel?: any;
 }
 
+export interface ContactInfo{
+
+  email: string;
+  phone: string;
+
+}
 export interface Shift {
   id?: number;
   skills: string[];
@@ -14,10 +22,21 @@ export interface Shift {
   employee_required: number;
 }
 
+export interface DateShift {
+  id?: number;
+  type: string;
+  day: string;
+  startTime: string;
+  endTime: string;
+  required: number;
+  date: string;
+}
+
 export interface ShiftAssignment {
   id?: number;
-  shift: Shift;
-  employee?: Employee[];
+  dateShift: DateShift;
+  store_id: number;
+  employee?: Employee;
 }
 
 export interface Roster {

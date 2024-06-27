@@ -13,4 +13,14 @@ public class ShiftTiming {
     private LocalTime end;
     private String totalLength;
     private String effectiveWork;
+
+    @Override
+    public String toString() {
+        return "ShiftTiming{" +
+                "start=" + start +
+                ", end=" + end +
+                ", totalLength='" + totalLength + '\'' +
+                ", effectiveWork='" + effectiveWork + '\'' +
+                '}';
+    }
 }

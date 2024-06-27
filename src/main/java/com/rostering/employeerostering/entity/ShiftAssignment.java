@@ -5,6 +5,7 @@ import lombok.Setter;
 import org.optaplanner.core.api.domain.entity.PlanningEntity;
 import org.optaplanner.core.api.domain.lookup.PlanningId;
 import org.optaplanner.core.api.domain.variable.PlanningListVariable;
+import org.optaplanner.core.api.domain.variable.PlanningVariable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,17 +21,17 @@ public class ShiftAssignment {
 
     private DateShift dateShift;
 
-    private String store_name;
+    private int store_id;
 
-    @PlanningListVariable(valueRangeProviderRefs = "employeeRange")
-    private List<Employee> employee = new ArrayList<>();
+    @PlanningVariable(valueRangeProviderRefs = "employeeRange")
+    private Employee employee ;
 
     @Override
     public String toString() {
         return "ShiftAssignment{" +
                 "id=" + id +
                 ", dateShift=" + dateShift +
-                ", store_name='" + store_name + '\'' +
+                ", store_name='" + store_id + '\'' +
                 ", employee=" + employee +
                 '}';
     }
