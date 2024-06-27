@@ -4,13 +4,27 @@
     <div>
       <form (submit)="onSubmit()">
         <div class="row">
-          <div class="form-group col-6">
+          <div class="form-group col-4">
             <label for="employeeFile">Upload Employees.json File</label>
             <input type="file" id="employeeFile" (change)="onFileSelected($event, 'employees')" accept=".json"/>
           </div>
-          <div class="form-group col-4">
+          <div class="form-group col-3">
             <label for="shiftFile">Upload Store.json File</label>
             <input type="file" id="shiftFile" (change)="onFileSelected($event, 'shifts')" accept=".json"/>
+          </div>
+          <div class="form-group col-3">
+            <label for="seasonsType">Select Season</label>
+            <select class="custom-select" id="seasonsType" [(ngModel)]="seasonsType" name="seasonsType">
+              <option *ngFor="let s of seasons" [value]="s">{{s}}</option>
+            </select>
+          </div>
+          <div class="form-group col-3">
+            <label for="startDate">Start Date</label>
+            <input type="date" id="startDate" [(ngModel)]="startDate" name="startDate">
+          </div>
+          <div class="form-group col-3">
+            <label for="endDate">End Date</label>
+            <input type="date" id="endDate" [(ngModel)]="endDate" name="endDate">
           </div>
           <button type="submit" class="btn btn-primary col-2">Submit</button>
         </div>
@@ -30,6 +44,7 @@
             <th>Id</th>
             <th>Skills</th>
             <th>Days</th>
+            <th>Date</th>
             <th>Start Time</th>
             <th>End Time</th>
             <th>Employee Required</th>
@@ -39,6 +54,7 @@
             <td>{{assignment.id}}</td>
             <td>{{assignment.dateShift.type}}</td>
             <td>{{assignment.dateShift.day}}</td>
+            <td>{{assignment.dateShift.date}}</td>
             <td>{{assignment.dateShift.startTime}}</td>
             <td>{{assignment.dateShift.endTime}}</td>
             <td>{{assignment.dateShift.required}}</td>
@@ -56,7 +72,7 @@
                       <div *ngFor="let shiftTypes of model.durationPattern.shiftType">
                         <div *ngFor="let shift of shiftTypes">
                           <div *ngFor="let timing of shift.timings">
-                            <p>Time: {{timing.start}} - {{timing.end}}</p>
+                            <p>{{timing.start}} - {{timing.end}}</p>
                           </div>
                           <hr>
                         </div>

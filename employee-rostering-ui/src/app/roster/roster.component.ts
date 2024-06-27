@@ -16,8 +16,16 @@ export class RosterComponent {
   problemId = '';
   message = '';
   scoreExplanation:any;
-
-  constructor(private http: HttpClient, private rosterService: RosterService) {}
+  seasonsType: string="";
+  seasons= [
+    "Summer",
+    "Winter"
+  ]
+  startDate = "";
+  endDate: string = "";
+  constructor(private http: HttpClient, private rosterService: RosterService) {
+    this.seasonsType = this.seasons[0];
+  }
 
   onFileSelected(event: Event, fileType: string): void {
     const input = event.target as HTMLInputElement;
@@ -35,6 +43,9 @@ export class RosterComponent {
       const formData: FormData = new FormData();
       formData.append('employees', this.employeeFile, this.employeeFile.name);
       formData.append('stores', this.shiftFile, this.shiftFile.name);
+      formData.append('seasonsType', this.seasonsType);
+      formData.append('startDate', this.startDate);
+      formData.append('endDate', this.endDate);
 
       this.rosterService.solveRoster(formData).subscribe(response => {
         this.problemId = response;

@@ -18,6 +18,16 @@ public class Roster {
 
     private List<ShiftAssignment> shiftAssignmentList = new ArrayList<>();
 
+    private String seasonType;
+
+    public String getSeasonType() {
+        return seasonType;
+    }
+
+    public void setSeasonType(String seasonType) {
+        this.seasonType = seasonType;
+    }
+
     private List<Store> storeList;
 
     @PlanningScore

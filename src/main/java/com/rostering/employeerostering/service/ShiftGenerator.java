@@ -37,11 +37,11 @@ public class ShiftGenerator {
         return shifts;
     }
 
-    public static List<DateShift> start(WorkerRequirement workerRequirement) {
-        LocalDate startDate = LocalDate.of(2024, 6, 17);
-        LocalDate endDate = LocalDate.of(2024, 6, 22);
+    public static List<DateShift> start(WorkerRequirement workerRequirement, String startDate, String endDate) {
+        LocalDate start = LocalDate.parse(startDate);
+        LocalDate end = LocalDate.parse(endDate);
 
-        List<DateShift> shifts = generateShifts(startDate, endDate, workerRequirement);
+        List<DateShift> shifts = generateShifts(start, end, workerRequirement);
         return shifts;
     }
 }

@@ -31,6 +31,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -52,9 +53,12 @@ public class RosteringController {
 
     @PostMapping("/solve")
     public UUID solveRoster(@RequestParam("employees") MultipartFile employeesFile,
-                            @RequestParam("stores") MultipartFile storeFile) throws IOException {
+                            @RequestParam("stores") MultipartFile storeFile,
+                            @RequestParam("seasonsType") String seasonsType,
+                            @RequestParam("startDate") String startDate,
+                            @RequestParam("endDate") String endDate) throws IOException {
 
-        Roster roster = getJsonData(employeesFile, storeFile);
+        Roster roster = getJsonData(employeesFile, storeFile, seasonsType, startDate, endDate);
 
         UUID problemId = UUID.randomUUID();
         SolverJob<Roster, UUID> solverJob = solverManager.solveAndListen(problemId,
@@ -130,7 +134,7 @@ public class RosteringController {
         return new ConstraintMatchDTO(constraintMatch.getJustificationList().toString(), constraintMatch.getScore().toString());
     }
     
-    private Roster getJsonData(MultipartFile employeesFile, MultipartFile storeFile ) throws IOException {
+    private Roster getJsonData(MultipartFile employeesFile, MultipartFile storeFile, String seasonsType, String startDate, String endDate) throws IOException {
         // Load JSON files
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
@@ -152,8 +156,14 @@ public class RosteringController {
         List<ShiftAssignment> shiftAssignmentList = new ArrayList<>();
         int i = 0;
         for (Store s : stores) {
-            for (WorkerRequirement workerRequirement : s.getWorkerRequirement()) {
-                List<DateShift> dateShifts = ShiftGenerator.start(workerRequirement);
+            int index = IntStream.range(0, s.getSeasons().size())
+                    .filter(number -> s.getSeasons().get(number).getSeasonType().equals(seasonsType))
+                    .findFirst()
+                    .orElse(-1);
+            roster.setSeasonType(s.getSeasons().get(index).getSeasonType());
+            for (WorkerRequirement workerRequirement : s.getSeasons().get(index).getWorkerRequirement()) {
+
+                List<DateShift> dateShifts = ShiftGenerator.start(workerRequirement, startDate, endDate);
                 for (DateShift shift : dateShifts) {
                     int totalRequried = shift.getRequired();
                     for(int requriedNumber = 0; requriedNumber < totalRequried; requriedNumber++){

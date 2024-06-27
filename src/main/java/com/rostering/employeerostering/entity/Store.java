@@ -13,7 +13,5 @@ public class Store {
     private String name;
     private Integer parentStoreId;
     private List<LocalTime> storeHours;
-    private List<WorkerRequirement> workerRequirement;
-
-
+    private List<Seasons> seasons;
 }
