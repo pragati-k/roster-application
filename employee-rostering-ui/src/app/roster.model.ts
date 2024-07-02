@@ -4,7 +4,7 @@ export interface Employee {
   position: string[];
   assignedStoreId: number;
   contactInfo: ContactInfo;
-  scheduleModel?: any;
+  scheduleModelIds?: any;
 }
 
 export interface ContactInfo{

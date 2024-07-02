@@ -7,9 +7,8 @@ import com.rostering.employeerostering.dto.ConstraintMatchTotalDTO;
 import com.rostering.employeerostering.dto.EmployeeDTO;
 import com.rostering.employeerostering.dto.ScoreExplanationDTO;
 import com.rostering.employeerostering.entity.*;
+import com.rostering.employeerostering.service.ScheduleModelRotation;
 import com.rostering.employeerostering.service.ShiftGenerator;
-import lombok.Getter;
-import lombok.Setter;
 import org.optaplanner.core.api.score.ScoreExplanation;
 import org.optaplanner.core.api.score.ScoreManager;
 import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScore;
@@ -26,7 +25,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -46,6 +47,9 @@ public class RosteringController {
 
     @Autowired
     private ShiftGenerator shiftGenerator;
+
+    @Autowired
+    private ScheduleModelRotation scheduleModelRotation;
     private final ConcurrentMap<UUID, SolverJob<Roster, UUID>> solverJobMap = new ConcurrentHashMap<>();
 
     private final ConcurrentMap<UUID, Roster> bestSolutionMap = new ConcurrentHashMap<>();
@@ -54,18 +58,16 @@ public class RosteringController {
     @PostMapping("/solve")
     public UUID solveRoster(@RequestParam("employees") MultipartFile employeesFile,
                             @RequestParam("stores") MultipartFile storeFile,
-                            @RequestParam("seasonsType") String seasonsType,
                             @RequestParam("startDate") String startDate,
                             @RequestParam("endDate") String endDate) throws IOException {
 
-        Roster roster = getJsonData(employeesFile, storeFile, seasonsType, startDate, endDate);
+        Roster roster = getJsonData(employeesFile, storeFile, startDate, endDate);
 
         UUID problemId = UUID.randomUUID();
         SolverJob<Roster, UUID> solverJob = solverManager.solveAndListen(problemId,
                 id -> roster,
                 bestSolution -> {
                     System.out.println(LocalDateTime.now());
-                    System.out.println(bestSolution.getShiftAssignmentList());
                     System.out.println(bestSolution.getScore().getHardScore());
                     System.out.println(bestSolution.getScore().getSoftScore());
                     System.out.println(bestSolution.getScore().getInitScore());
@@ -83,8 +85,8 @@ public class RosteringController {
         Roster solution = bestSolutionMap.get(problemId);
         for (ShiftAssignment shiftAssignment : solution.getShiftAssignmentList()) {
             if (shiftAssignment.getEmployee() != null) {
-                System.out.println(shiftAssignment.getDateShift());
-                System.out.println(shiftAssignment.getEmployee());
+                System.out.printf("%s - %s - %s - %s - %s\n", shiftAssignment.getDateShift().getDate(), shiftAssignment.getDateShift().getDay(), shiftAssignment.getDateShift().getType(), shiftAssignment.getDateShift().getStartTime(), shiftAssignment.getDateShift().getEndTime());
+                System.out.printf("%s - %s\n", shiftAssignment.getEmployee().getName(), shiftAssignment.getEmployee().getScheduleModelIds());
             }
         }
         return bestSolutionMap.get(problemId);
@@ -134,7 +136,7 @@ public class RosteringController {
         return new ConstraintMatchDTO(constraintMatch.getJustificationList().toString(), constraintMatch.getScore().toString());
     }
     
-    private Roster getJsonData(MultipartFile employeesFile, MultipartFile storeFile, String seasonsType, String startDate, String endDate) throws IOException {
+    private Roster getJsonData(MultipartFile employeesFile, MultipartFile storeFile, String startDate, String endDate) throws IOException {
         // Load JSON files
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
@@ -143,25 +145,23 @@ public class RosteringController {
         ClassPathResource scheduleModelsResource = new ClassPathResource("data/ScheduleModels.json");
         List<ScheduleModel> scheduleModels = Arrays.asList(objectMapper.readValue(scheduleModelsResource.getInputStream(), ScheduleModel[].class));
 
-        List<Employee> employees = new ArrayList<>();
-        for (EmployeeDTO employeeDTO2 : employeesDTO) {
-            List<ScheduleModel> employeeScheduleModel = scheduleModels.stream().filter(item -> employeeDTO2.getScheduleModelIds().contains(item.getShiftPatternId())).collect(Collectors.toList());
-            employees.add(new Employee(employeeDTO2.getWorkerId(), employeeDTO2.getName(), employeeDTO2.getPosition(), employeeDTO2.getAssignedStoreId(), employeeDTO2.getContactInfo(), employeeScheduleModel));
-        }
+        long numberOfWeeks = ChronoUnit.WEEKS.between(LocalDate.parse(startDate), LocalDate.parse(endDate)) + 1;
 
+        employeesDTO.forEach(item -> item.setScheduleModelIds(scheduleModelRotation.repeatTillNNonConsecutive(item.getScheduleModelIds(), numberOfWeeks)));
         List<Store> stores = Arrays.asList(objectMapper.readValue(storeFile.getInputStream(), Store[].class));
 
         Roster roster = new Roster();
-        roster.setEmployeeList(employees);
+        roster.setEmployeeList(employeesDTO);
         List<ShiftAssignment> shiftAssignmentList = new ArrayList<>();
+
+
         int i = 0;
         for (Store s : stores) {
-            int index = IntStream.range(0, s.getSeasons().size())
-                    .filter(number -> s.getSeasons().get(number).getSeasonType().equals(seasonsType))
-                    .findFirst()
-                    .orElse(-1);
-            roster.setSeasonType(s.getSeasons().get(index).getSeasonType());
-            for (WorkerRequirement workerRequirement : s.getSeasons().get(index).getWorkerRequirement()) {
+            Seasons seasonType = s.getSeasons().stream()
+                    .filter(seasons -> LocalDate.parse(startDate).isAfter(seasons.getSeasonDate().get(0)) && LocalDate.parse(endDate).isBefore(seasons.getSeasonDate().get(1)))
+                    .findFirst().orElse(new Seasons());
+            roster.setSeasonDate(seasonType.getSeasonDate());
+            for (WorkerRequirement workerRequirement : seasonType.getWorkerRequirement()) {
 
                 List<DateShift> dateShifts = ShiftGenerator.start(workerRequirement, startDate, endDate);
                 for (DateShift shift : dateShifts) {
@@ -173,6 +173,8 @@ public class RosteringController {
                         shift.setRequired(1);
                         shiftAssignment.setDateShift(shift);
                         shiftAssignmentList.add(shiftAssignment);
+                        shiftAssignment.setStartDate(LocalDate.parse(startDate));
+                        shiftAssignment.setEndDate(LocalDate.parse(endDate));
                         i++;
                     }
                 }

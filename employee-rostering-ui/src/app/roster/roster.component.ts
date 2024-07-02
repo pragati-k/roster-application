@@ -16,15 +16,9 @@ export class RosterComponent {
   problemId = '';
   message = '';
   scoreExplanation:any;
-  seasonsType: string="";
-  seasons= [
-    "Summer",
-    "Winter"
-  ]
   startDate = "";
   endDate: string = "";
   constructor(private http: HttpClient, private rosterService: RosterService) {
-    this.seasonsType = this.seasons[0];
   }
 
   onFileSelected(event: Event, fileType: string): void {
@@ -43,7 +37,6 @@ export class RosterComponent {
       const formData: FormData = new FormData();
       formData.append('employees', this.employeeFile, this.employeeFile.name);
       formData.append('stores', this.shiftFile, this.shiftFile.name);
-      formData.append('seasonsType', this.seasonsType);
       formData.append('startDate', this.startDate);
       formData.append('endDate', this.endDate);
 
@@ -78,4 +71,9 @@ export class RosterComponent {
         this.scoreExplanation = response;
       })
     }
+
+  getDayIndex(day: string, i: number): boolean {
+    const days = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'];
+    return days.indexOf(day) == i;
+  }
 }

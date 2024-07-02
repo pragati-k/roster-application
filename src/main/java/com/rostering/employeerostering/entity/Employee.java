@@ -1,14 +1,9 @@
 package com.rostering.employeerostering.entity;
 
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import lombok.*;
 
 import java.util.List;
-import java.util.Set;
-
 
 @Getter
 @Setter
@@ -30,7 +25,6 @@ public class Employee {
         this.contactInfo = contactInfo;
         this.scheduleModel = scheduleModel;
     }
-
     @Override
     public String toString() {
         return "Employee{" +

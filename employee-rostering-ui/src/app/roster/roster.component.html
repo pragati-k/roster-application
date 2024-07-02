@@ -1,114 +1,153 @@
 <div class="container">
   <h1 class="text-center">Employee Rostering</h1>
   <div class="row">
-    <div>
-      <form (submit)="onSubmit()">
-        <div class="row">
-          <div class="form-group col-4">
-            <label for="employeeFile">Upload Employees.json File</label>
-            <input type="file" id="employeeFile" (change)="onFileSelected($event, 'employees')" accept=".json"/>
-          </div>
-          <div class="form-group col-3">
-            <label for="shiftFile">Upload Store.json File</label>
-            <input type="file" id="shiftFile" (change)="onFileSelected($event, 'shifts')" accept=".json"/>
-          </div>
-          <div class="form-group col-3">
-            <label for="seasonsType">Select Season</label>
-            <select class="custom-select" id="seasonsType" [(ngModel)]="seasonsType" name="seasonsType">
-              <option *ngFor="let s of seasons" [value]="s">{{s}}</option>
-            </select>
-          </div>
-          <div class="form-group col-3">
-            <label for="startDate">Start Date</label>
-            <input type="date" id="startDate" [(ngModel)]="startDate" name="startDate">
-          </div>
-          <div class="form-group col-3">
-            <label for="endDate">End Date</label>
-            <input type="date" id="endDate" [(ngModel)]="endDate" name="endDate">
-          </div>
-          <button type="submit" class="btn btn-primary col-2">Submit</button>
+
+    <div class="container mt-3">
+      <div class="card">
+        <div class="card-header text-white bg-primary">
+          <h4 class="mb-0">Upload Files and Configure Roster</h4>
         </div>
-      </form>
+        <div class="card-body">
+          <form (submit)="onSubmit()">
+            <div class="row mb-3">
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="employeeFile" class="form-label">Upload Employees.json File</label>
+                  <input type="file" id="employeeFile" class="form-control"
+                         (change)="onFileSelected($event, 'employees')" accept=".json"/>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="shiftFile" class="form-label">Upload Store.json File</label>
+                  <input type="file" id="shiftFile" class="form-control" (change)="onFileSelected($event, 'shifts')"
+                         accept=".json"/>
+                </div>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="startDate" class="form-label">Start Date</label>
+                  <input type="date" id="startDate" class="form-control" [(ngModel)]="startDate" name="startDate">
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="endDate" class="form-label">End Date</label>
+                  <input type="date" id="endDate" class="form-control" [(ngModel)]="endDate" name="endDate">
+                </div>
+              </div>
+            </div>
+            <div class="d-flex justify-content-center">
+              <button type="submit" class="btn btn-primary btn-lg" style="width: 20%">Submit</button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
 
-    <div >
-      <button (click)="getSolveRoster()" class="btn btn-primary">Get Roster</button>
-      <button (click)="terminateSolveRoster()" class="btn btn-primary m-3">Terminate Roster</button>
-      <div>
-        {{message}}
+    <div class="container mt-5">
+      <div class="d-flex justify-content-between mb-4">
+        <button (click)="getSolveRoster()" class="btn btn-primary">Get Roster</button>
+        <button (click)="terminateSolveRoster()" class="btn btn-danger">Terminate Roster</button>
       </div>
-            <div *ngIf="roster.shiftAssignmentList">
-        <h2>Generated Roster</h2>
-        <table class="table table-bordered">
-          <tr>
-            <th>Id</th>
-            <th>Skills</th>
-            <th>Days</th>
-            <th>Date</th>
-            <th>Start Time</th>
-            <th>End Time</th>
-            <th>Employee Required</th>
-            <th>Employee</th>
-          </tr>
-          <tr *ngFor="let assignment of roster.shiftAssignmentList">
-            <td>{{assignment.id}}</td>
-            <td>{{assignment.dateShift.type}}</td>
-            <td>{{assignment.dateShift.day}}</td>
-            <td>{{assignment.dateShift.date}}</td>
-            <td>{{assignment.dateShift.startTime}}</td>
-            <td>{{assignment.dateShift.endTime}}</td>
-            <td>{{assignment.dateShift.required}}</td>
-            <td colspan="2">
-              <table class="table-bordered inner-table" style="width: 100%;">
-                <tr>
-                  <th>Name</th>
-                  <th>Skills</th>
-                  <th>Start time -- End Time</th>
-                </tr>
-                <tr><td>{{assignment.employee?.name}}</td>
-                  <td>{{assignment.employee?.position}}</td>
-                  <td>
-                    <div *ngFor="let model of assignment.employee?.scheduleModel">
-                      <div *ngFor="let shiftTypes of model.durationPattern.shiftType">
-                        <div *ngFor="let shift of shiftTypes">
-                          <div *ngFor="let timing of shift.timings">
-                            <p>{{timing.start}} - {{timing.end}}</p>
-                          </div>
-                          <hr>
-                        </div>
+
+      <div *ngIf="message" class="alert alert-info">
+        {{ message }}
+      </div>
+
+      <div *ngIf="roster.shiftAssignmentList">
+        <h2 class="mb-4">Generated Roster</h2>
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped">
+            <thead class="table-dark">
+            <tr>
+              <th>Id</th>
+              <th>Skills</th>
+              <th>Days</th>
+              <th>Date</th>
+              <th>Start Time</th>
+              <th>End Time</th>
+              <th>Employee Required</th>
+              <th>Employee</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let assignment of roster.shiftAssignmentList">
+              <td>{{ assignment.id }}</td>
+              <td>{{ assignment.dateShift.type }}</td>
+              <td>{{ assignment.dateShift.day }}</td>
+              <td>{{ assignment.dateShift.date }}</td>
+              <td>{{ assignment.dateShift.startTime }}</td>
+              <td>{{ assignment.dateShift.endTime }}</td>
+              <td>{{ assignment.dateShift.required }}</td>
+              <td>
+                <table class="table table-bordered table-sm m-0 inner-table">
+                  <thead class="table-light">
+                  <tr>
+                    <th>Name</th>
+                    <th>Skills</th>
+                    <th>Schedule</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr>
+                    <td>{{ assignment.employee?.name }}</td>
+                    <td>{{ assignment.employee?.position }}</td>
+                    <td>
+                      <div *ngFor="let id of assignment.employee?.scheduleModelIds">
+                        <p >{{ id }}</p>
                       </div>
-                    </div>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-        </table>
-      </div>
-      <div class="row">
-        <div class="col-6">
-          <h2>Score</h2>
-          <li>initScore : {{roster.score?.initScore}}</li>
-          <li>hardScore : {{roster.score?.hardScore}}</li>
-          <li>softScore : {{roster.score?.softScore}}</li>
-          <li>feasible : {{roster.score?.feasible}}</li>
-          <li>solutionInitialized : {{roster.score?.solutionInitialized}}</li>
-          <li>zero : {{roster.score?.zero}}</li>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+            </tbody>
+          </table>
         </div>
-        <div class="col-6">
-            <h1>Score Explanation</h1>
-            <div *ngIf="scoreExplanation">
-              <p>Score: {{ scoreExplanation.score }}</p>
-              <div *ngFor="let constraint of scoreExplanation.constraintMatchTotals">
-                <h3>constraintName : {{ constraint.constraintName }}</h3>
-                <p>Score: {{ constraint.score }}</p>
-                <ul>
-                  <li *ngFor="let match of constraint.constraintMatches">
-                    <b>Justification:</b> {{ match.justification }}
-                    <ol><b>Score:</b> {{ match.score }}</ol>
-                  </li>
-                </ul>
+      </div>
+
+      <div class="row mt-5">
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header bg-primary text-white">
+              <h2 class="mb-0">Score</h2>
+            </div>
+            <div class="card-body">
+              <ul class="list-unstyled">
+                <li><strong>Init Score:</strong> {{ roster.score?.initScore }}</li>
+                <li><strong>Hard Score:</strong> {{ roster.score?.hardScore }}</li>
+                <li><strong>Soft Score:</strong> {{ roster.score?.softScore }}</li>
+                <li><strong>Feasible:</strong> {{ roster.score?.feasible }}</li>
+                <li><strong>Solution Initialized:</strong> {{ roster.score?.solutionInitialized }}</li>
+                <li><strong>Zero:</strong> {{ roster.score?.zero }}</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header bg-secondary text-white">
+              <h2 class="mb-0">Score Explanation</h2>
+            </div>
+            <div class="card-body">
+              <div *ngIf="scoreExplanation">
+                <p><strong>Score:</strong> {{ scoreExplanation.score }}</p>
+                <div *ngFor="let constraint of scoreExplanation.constraintMatchTotals">
+                  <h3 class="h5">{{ constraint.constraintName }}</h3>
+                  <p><strong>Score:</strong> {{ constraint.score }}</p>
+                  <ul>
+                    <li *ngFor="let match of constraint.constraintMatches">
+                      <p><strong>Justification:</strong> {{ match.justification }}</p>
+                      <p><strong>Score:</strong> {{ match.score }}</p>
+                    </li>
+                  </ul>
+                </div>
               </div>
+            </div>
           </div>
         </div>
       </div>

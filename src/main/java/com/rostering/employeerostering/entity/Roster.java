@@ -1,6 +1,7 @@
 package com.rostering.employeerostering.entity;
 
 
+import com.rostering.employeerostering.dto.EmployeeDTO;
 import org.optaplanner.core.api.domain.solution.PlanningEntityCollectionProperty;
 import org.optaplanner.core.api.domain.solution.PlanningScore;
 import org.optaplanner.core.api.domain.solution.PlanningSolution;
@@ -8,24 +9,25 @@ import org.optaplanner.core.api.domain.solution.ProblemFactCollectionProperty;
 import org.optaplanner.core.api.domain.valuerange.ValueRangeProvider;
 import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScore;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 @PlanningSolution
 public class Roster {
 
-    private List<Employee> employeeList;
+    private List<EmployeeDTO> employeeList;
 
     private List<ShiftAssignment> shiftAssignmentList = new ArrayList<>();
 
-    private String seasonType;
+    private List<LocalDate> seasonDate;
 
-    public String getSeasonType() {
-        return seasonType;
+    public List<LocalDate> getSeasonDate() {
+        return seasonDate;
     }
 
-    public void setSeasonType(String seasonType) {
-        this.seasonType = seasonType;
+    public void setSeasonDate(List<LocalDate> seasonDate) {
+        this.seasonDate = seasonDate;
     }
 
     private List<Store> storeList;
@@ -43,11 +45,11 @@ public class Roster {
     }
     @ProblemFactCollectionProperty
     @ValueRangeProvider(id = "employeeRange")
-    public List<Employee> getEmployeeList() {
+    public List<EmployeeDTO> getEmployeeList() {
         return employeeList;
     }
 
-    public void setEmployeeList(List<Employee> employeeList) {
+    public void setEmployeeList(List<EmployeeDTO> employeeList) {
         this.employeeList = employeeList;
     }
     @PlanningEntityCollectionProperty
