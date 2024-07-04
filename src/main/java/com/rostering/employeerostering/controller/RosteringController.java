@@ -32,7 +32,6 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -53,6 +52,8 @@ public class RosteringController {
     private final ConcurrentMap<UUID, SolverJob<Roster, UUID>> solverJobMap = new ConcurrentHashMap<>();
 
     private final ConcurrentMap<UUID, Roster> bestSolutionMap = new ConcurrentHashMap<>();
+
+    List<EmployeeDTO> employeeList = new ArrayList<>();
 
 
     @PostMapping("/solve")
@@ -119,6 +120,11 @@ public class RosteringController {
         return convertScoreExplanationToDTO(scoreExplanation);
     }
 
+    @GetMapping("/employee-list")
+    public List<EmployeeDTO> getEmployeeList(){
+        return employeeList;
+    }
+
     private ScoreExplanationDTO convertScoreExplanationToDTO(ScoreExplanation<Roster, HardSoftScore> scoreExplanation) {
         List<ConstraintMatchTotalDTO> constraintMatchTotalDTOs = scoreExplanation.getConstraintMatchTotalMap().values().stream()
                 .map(this::convertConstraintMatchTotalToDTO)
@@ -142,8 +148,7 @@ public class RosteringController {
         objectMapper.registerModule(new JavaTimeModule());
 
         List<EmployeeDTO> employeesDTO = Arrays.asList(objectMapper.readValue(employeesFile.getInputStream(), EmployeeDTO[].class));
-        ClassPathResource scheduleModelsResource = new ClassPathResource("data/ScheduleModels.json");
-        List<ScheduleModel> scheduleModels = Arrays.asList(objectMapper.readValue(scheduleModelsResource.getInputStream(), ScheduleModel[].class));
+        employeeList = Arrays.asList(objectMapper.readValue(employeesFile.getInputStream(), EmployeeDTO[].class));
 
         long numberOfWeeks = ChronoUnit.WEEKS.between(LocalDate.parse(startDate), LocalDate.parse(endDate)) + 1;
 

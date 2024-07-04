@@ -1,0 +1,27 @@
+<div class="container mt-4 text-center">
+  <h2 class="mb-4">Employee List</h2>
+  <table class="table table-bordered table-striped">
+    <thead>
+    <tr>
+      <th>Worker ID</th>
+      <th>Name</th>
+      <th>Position</th>
+      <th>Assigned Store ID</th>
+      <th>Email</th>
+      <th>Phone</th>
+      <th>Schedule Model Ids</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let employee of employee">
+      <td>{{ employee.workerId }}</td>
+      <td>{{ employee.name }}</td>
+      <td>{{ employee.position.join(', ') }}</td>
+      <td>{{ employee.assignedStoreId }}</td>
+      <td>{{ employee.contactInfo.email }}</td>
+      <td>{{ employee.contactInfo.phone }}</td>
+      <td>{{employee.scheduleModelIds.join(', ')}}</td>
+    </tr>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,32 @@
+.bg-dark {
+  background-color: #000 !important;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+}
+
+.nav-link:hover {
+  background-color: #333;
+}
+
+.link-light:hover {
+  background-color: #555;
+}
+
+.inner-table th, .inner-table td {
+  vertical-align: middle;
+}
+
+.menu-collapse ul {
+  padding-left: 1.25rem;
+}
+
+.collapse ul li a {
+  color: #ccc;
+}
+
+.collapse ul li a:hover {
+  color: #fff;
+}

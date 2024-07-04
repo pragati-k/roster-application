@@ -1,0 +1,30 @@
+.table th, .table td {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.table th {
+  background-color: #007bff;
+  color: white;
+}
+
+.card-title {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.card-text {
+  font-size: 0.875rem;
+}
+
+.no-shifts {
+  color: #999;
+  font-style: italic;
+}
+
+.each-shift{
+  text-align: left;
+  border: 1px solid;
+  padding-left: 10px;
+  background-color: #e2e2e2;
+}

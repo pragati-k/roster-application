@@ -1,0 +1,32 @@
+<div class="container mt-4">
+  <h2 class="mb-4">Shift Calendar</h2>
+  <div class="table-responsive">
+    <table class="table table-bordered">
+      <thead>
+      <tr>
+        <th>Shift Type / Date</th>
+        <th *ngFor="let date of dates">{{ date }}</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let type of shiftTypes">
+        <td>{{ type }}</td>
+        <td *ngFor="let date of dates">
+          <div *ngIf="shiftsByTypeAndDate[type] && shiftsByTypeAndDate[type][date]">
+            <div *ngFor="let shift of shiftsByTypeAndDate[type][date]" class="mb-2 each-shift">
+              <p class="card-text">
+                <strong>Start Time:</strong> {{ shift.dateShift.startTime }}<br>
+                <strong>End Time:</strong> {{ shift.dateShift.endTime }}<br>
+                <strong>{{ shift.employee.name }}</strong>
+              </p>
+            </div>
+          </div>
+          <div *ngIf="!shiftsByTypeAndDate[type] || !shiftsByTypeAndDate[type][date]">
+            <p>No shifts</p>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

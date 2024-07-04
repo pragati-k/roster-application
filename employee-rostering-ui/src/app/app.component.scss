@@ -1,0 +1,13 @@
+.body-container{
+  display: flex;
+  .left-content{
+    height: 100vh;
+    flex: 0 0 250px;
+    background-color: black;
+    color: white !important;
+  }
+  .right-content{
+    width: 100%;
+  }
+}
+

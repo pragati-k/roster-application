@@ -10,10 +10,13 @@ export class RosterService {
 
   private apiUrl = 'http://localhost:8080/api/roster';
 
+  private problemID: any;
+
   constructor(private http: HttpClient) { }
 
   solveRoster(formData: FormData): Observable<string> {
-    return this.http.post<string>(`${this.apiUrl}/solve`, formData);
+    this.problemID = this.http.post<string>(`${this.apiUrl}/solve`, formData);
+    return this.problemID;
   }
 
   getSolveRoster(problemId: string): Observable<Roster> {
@@ -26,5 +29,13 @@ export class RosterService {
 
   terminateSolveRoster(problemId: string): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/terminate/` + problemId);
+  }
+
+  getEmployeeList(){
+    return this.http.get(`${this.apiUrl}/employee-list`);
+  }
+
+  getProblemId(): Observable<string>{
+    return this.problemID;
   }
 }

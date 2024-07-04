@@ -37,11 +37,13 @@ export interface ShiftAssignment {
   dateShift: DateShift;
   store_id: number;
   employee?: Employee;
+  startDate: string;
+  endDate: string;
 }
 
 export interface Roster {
   employeeList: Employee[];
   shiftList: Shift[];
-  shiftAssignmentList?: ShiftAssignment[];
+  shiftAssignmentList: ShiftAssignment[];
   score?: any;
 }

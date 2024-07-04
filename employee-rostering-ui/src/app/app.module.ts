@@ -7,11 +7,17 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RosterComponent } from './roster/roster.component';
 import {FormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
+import { NavbarComponent } from './navbar/navbar.component';
+import { SidemenuComponent } from './sidemenu/sidemenu.component';
+import {EmployeeModule} from "./employee/employee.module";
+import {StoreModule} from "./store/store.module";
 
 @NgModule({
   declarations: [
     AppComponent,
-    RosterComponent
+    RosterComponent,
+    NavbarComponent,
+    SidemenuComponent
   ],
   imports: [
     BrowserModule,
@@ -19,6 +25,8 @@ import {HttpClientModule} from "@angular/common/http";
     BrowserAnimationsModule,
     FormsModule,
     HttpClientModule,
+    EmployeeModule,
+    StoreModule
   ],
   providers: [],
   bootstrap: [AppComponent]
