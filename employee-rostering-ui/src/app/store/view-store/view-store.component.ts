@@ -42,6 +42,14 @@ export class ViewStoreComponent implements OnInit {
       }
       this.shiftsByTypeAndDate[type][date].push(shift);
     });
+
+    Object.keys(this.shiftsByTypeAndDate).forEach(type => {
+      Object.keys(this.shiftsByTypeAndDate[type]).forEach(date => {
+        this.shiftsByTypeAndDate[type][date].sort((a:any, b:any) => {
+          return a.dateShift.startTime.localeCompare(b.dateShift.startTime);
+        });
+      });
+    });
   }
 
   getDates(): string[] {

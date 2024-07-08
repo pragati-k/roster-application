@@ -1,11 +1,19 @@
+.container{
+  width: 100%;
+  overflow-x: scroll;
+  .table-responsive{
+    width: 200%;
+  }
+}
+
 .table th, .table td {
   text-align: center;
   vertical-align: middle;
 }
 
 .table th {
-  background-color: #007bff;
-  color: white;
+  background-color: #509ae4;
+  color: black;
 }
 
 .card-title {

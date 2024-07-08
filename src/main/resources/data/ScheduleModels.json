@@ -1352,7 +1352,8 @@
           ]
         ]
       }
-    },{
+    },
+    {
       "shiftPatternId": 12,
       "name": "ThirtyFive - 2",
       "applyShiftOnHoliday": "True",

@@ -1,10 +1,10 @@
 <div class="container mt-4">
-  <h2 class="mb-4">Shift Calendar</h2>
+  <h2 class="mb-4">Roster</h2>
   <div class="table-responsive">
     <table class="table table-bordered">
       <thead>
       <tr>
-        <th>Shift Type / Date</th>
+        <th>Position / Date</th>
         <th *ngFor="let date of dates">{{ date }}</th>
       </tr>
       </thead>
@@ -17,7 +17,7 @@
               <p class="card-text">
                 <strong>Start Time:</strong> {{ shift.dateShift.startTime }}<br>
                 <strong>End Time:</strong> {{ shift.dateShift.endTime }}<br>
-                <strong>{{ shift.employee.name }}</strong>
+                <strong>Employee: </strong> {{ shift.employee.name }}
               </p>
             </div>
           </div>
