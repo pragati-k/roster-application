@@ -1,27 +1,80 @@
-<div class="container mt-4 text-center">
-  <h2 class="mb-4">Employee List</h2>
-  <table class="table table-bordered table-striped">
-    <thead>
-    <tr>
-      <th>Worker ID</th>
-      <th>Name</th>
-      <th>Position</th>
-      <th>Assigned Store ID</th>
-      <th>Email</th>
-      <th>Phone</th>
-      <th>Schedule Model Ids</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let employee of employee">
-      <td>{{ employee.workerId }}</td>
-      <td>{{ employee.name }}</td>
-      <td>{{ employee.position.join(', ') }}</td>
-      <td>{{ employee.assignedStoreId }}</td>
-      <td>{{ employee.contactInfo.email }}</td>
-      <td>{{ employee.contactInfo.phone }}</td>
-      <td>{{employee.scheduleModelIds.join(', ')}}</td>
-    </tr>
-    </tbody>
-  </table>
+<div class="container mt-4">
+  <h2 class="mb-4">Employee Details</h2>
+  <div class="table-responsive">
+    <table class="table table-bordered">
+      <thead>
+      <tr>
+        <th>Name</th>
+        <th>Position</th>
+        <th>Employment Type</th>
+        <th>Store ID</th>
+        <th>Schedule Model ID</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <ng-container *ngFor="let employee of employee" >
+        <tr>
+          <td>{{ employee.name }}</td>
+          <td>{{ employee.position }}</td>
+          <td>{{ employee.employmentType }}</td>
+          <td>{{ employee.storeId }}</td>
+          <td>{{ employee.scheduleModel?.id}}</td>
+          <td>
+            <button class="btn btn-info" (click)="toggleRow(employee.id)">
+              {{ expandedEmployeeId === employee.id ? 'Hide Details' : 'Show Details' }}
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="expandedEmployeeId === employee.id" class="table-secondary">
+          <td colspan="6">
+            <div class="accordion">
+              <div class="accordion-item">
+                <h2 class="accordion-header ps-3 mb-0">
+                    Schedule Model (ID: {{ employee.scheduleModel?.id }})
+                </h2>
+                <div>
+                  <div class="accordion-body">
+                    <table class="table table-bordered">
+                      <thead>
+                      <tr>
+                        <th>Day</th>
+                        <th>Start Time</th>
+                        <th>End Time</th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      <ng-container *ngFor="let pattern of employee.scheduleModel.shiftPatternList; let i = index">
+                        <tr>
+                          <td colspan="4" class="table-bordered shift-number">
+                            <strong>Shift {{ i + 1}}</strong>
+                          </td>
+                        </tr>
+                        <ng-container *ngFor="let group of groupShiftTimingsByDay(pattern.shiftTimings)">
+                          <tr>
+                            <td [attr.rowspan]="group.timings.length">
+                              <strong>{{ group.day }}</strong>
+                            </td>
+                            <td>{{ group.timings[0]?.start }}</td>
+                            <td>{{ group.timings[0]?.end }}</td>
+                          </tr>
+                            <tr *ngFor="let timing of group.timings.slice(1)">
+                              <td>{{ timing.start }}</td>
+                              <td>{{ timing.end }}</td>
+                            </tr>
+                          </ng-container>
+                      </ng-container>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </ng-container>
+
+      </tbody>
+    </table>
+  </div>
 </div>

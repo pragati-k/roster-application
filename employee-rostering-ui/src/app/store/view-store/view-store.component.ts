@@ -1,14 +1,13 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnChanges, OnInit} from '@angular/core';
 import * as moment from 'moment';
 import {RosterService} from "../../roster.service";
-import {ShiftAssignment} from "../../roster.model";
 
 @Component({
   selector: 'app-view-store',
   templateUrl: './view-store.component.html',
   styleUrls: ['./view-store.component.scss']
 })
-export class ViewStoreComponent implements OnInit {
+export class ViewStoreComponent implements OnInit, OnChanges {
 
 
   @Input("roster")roster: any = null;
@@ -17,19 +16,32 @@ export class ViewStoreComponent implements OnInit {
   dates: string[] = [];
   startDate: string = '';
   endDate: string = '';
-  problemID='';
 
   constructor(private rosterService: RosterService) { }
-
   ngOnInit(): void {
-    console.log(this.roster)
+    if(this.roster == null){
+      this.rosterService.getStoreRequirement().subscribe(data =>{
+        this.roster = data;
         this.startDate = this.roster.shiftAssignmentList[0].startDate;
         this.endDate = this.roster.shiftAssignmentList[0].endDate
         this.organizeShiftsByTypeAndDate(this.roster.shiftAssignmentList);
         this.dates = this.getDates();
+      })
+    }
   }
 
+  ngOnChanges(changes: any) {
+    this.roster = changes.roster.currentValue;
+    console.log(this.roster)
+      this.startDate = this.roster.shiftAssignmentList[0].startDate;
+      this.endDate = this.roster.shiftAssignmentList[0].endDate
+      this.organizeShiftsByTypeAndDate(this.roster.shiftAssignmentList);
+      this.dates = this.getDates();
+  }
+
+
   private organizeShiftsByTypeAndDate(shifts: any[]): void {
+    this.shiftsByTypeAndDate = {};
     shifts.forEach(shift => {
       const type = shift.dateShift.type;
       const date = shift.dateShift.date;
@@ -63,5 +75,10 @@ export class ViewStoreComponent implements OnInit {
     }
 
     return dates;
+  }
+
+  isSunday(date: string): boolean {
+    const day = new Date(date).getDay();
+    return day === 0; // 0 corresponds to Sunday
   }
 }

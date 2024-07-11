@@ -5,27 +5,23 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalTime;
 import java.util.List;
+
 
 @Entity
 @Getter
 @Setter
-public class ShiftTiming {
+public class ShiftPattern {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private int day;
-
-    private LocalTime start;
-    private LocalTime end;
-
-
     @ManyToOne
-    @JoinColumn(name = "shift_pattern_id")
+    @JoinColumn(name = "schedule_model_id")
     @JsonIgnore
-    private ShiftPattern shiftPattern;
+    private ScheduleModel scheduleModel;
 
+    @OneToMany(mappedBy = "shiftPattern", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<ShiftTiming> shiftTimings;
 }

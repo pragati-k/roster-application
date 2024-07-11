@@ -1,28 +1,29 @@
+<h2 class="mb-4 text-center">Roster</h2>
 <div class="container mt-4">
-  <h2 class="mb-4">Roster</h2>
   <div class="table-responsive">
     <table class="table table-bordered">
-      <thead>
+      <thead class="thead-dark">
       <tr>
         <th>Position / Date</th>
-        <th *ngFor="let date of dates">{{ date }}</th>
+        <th *ngFor="let date of dates"  [ngClass]="{'highlight-sunday': isSunday(date)}">{{ date }}</th>
       </tr>
       </thead>
       <tbody>
       <tr *ngFor="let type of shiftTypes">
         <td>{{ type }}</td>
-        <td *ngFor="let date of dates">
+        <td *ngFor="let date of dates"  [ngClass]="{'highlight-sunday': isSunday(date)}">
           <div *ngIf="shiftsByTypeAndDate[type] && shiftsByTypeAndDate[type][date]">
             <div *ngFor="let shift of shiftsByTypeAndDate[type][date]" class="mb-2 each-shift">
-              <p class="card-text">
-                <strong>Start Time:</strong> {{ shift.dateShift.startTime }}<br>
-                <strong>End Time:</strong> {{ shift.dateShift.endTime }}<br>
-                <strong>Employee: </strong> {{ shift.employee.name }}
+              <p class="m-0">
+                {{ shift.dateShift.startTime | timeFormat}} - {{ shift.dateShift.endTime | timeFormat}}<br>
+                <ng-container *ngIf="shift.employee">
+                  <strong>Employee:</strong> {{ shift.employee.name }}
+                </ng-container>
               </p>
             </div>
           </div>
           <div *ngIf="!shiftsByTypeAndDate[type] || !shiftsByTypeAndDate[type][date]">
-            <p>No shifts</p>
+            <p class="text-muted m-0">No shifts</p>
           </div>
         </td>
       </tr>

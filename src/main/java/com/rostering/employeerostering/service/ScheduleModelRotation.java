@@ -14,7 +14,6 @@ import java.util.List;
 
 @Service
 public class ScheduleModelRotation {
-
     public List<Integer> repeatTillNNonConsecutive(List<Integer> numbers, long n) {
         List<Integer> result = new ArrayList<>((int) n);
 
@@ -59,15 +58,16 @@ public class ScheduleModelRotation {
         List<ScheduleModel> scheduleModels = Arrays.asList(objectMapper.readValue(scheduleModelsResource.getInputStream(), ScheduleModel[].class));
 
         return scheduleModels;
+
     }
 
     public static List<EmployeePairDTO> getEmployeePair() throws IOException {
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
-        ClassPathResource scheduleModelsResource = new ClassPathResource("data/EmployeePairs.json");
-        List<EmployeePairDTO> employeePairDTOList = Arrays.asList(objectMapper.readValue(scheduleModelsResource.getInputStream(), EmployeePairDTO[].class));
-
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        objectMapper.registerModule(new JavaTimeModule());
+//        ClassPathResource scheduleModelsResource = new ClassPathResource("data/EmployeePairs.json");
+//        List<EmployeePairDTO> employeePairDTOList = Arrays.asList(objectMapper.readValue(scheduleModelsResource.getInputStream(), EmployeePairDTO[].class));
+        List<EmployeePairDTO> employeePairDTOList = new ArrayList<>();
         return employeePairDTOList;
     }
 }

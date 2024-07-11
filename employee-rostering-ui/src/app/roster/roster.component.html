@@ -10,11 +10,6 @@
           <form (submit)="onSubmit()">
             <div class="row mb-3">
               <div class="col-md-4">
-                <div class="form-group">
-                  <label for="employeeFile" class="form-label">Upload Employees.json File</label>
-                  <input type="file" id="employeeFile" class="form-control"
-                         (change)="onFileSelected($event, 'employees')" accept=".json"/>
-                </div>
               </div>
               <div class="col-md-4">
                 <div class="form-group">
@@ -58,59 +53,6 @@
 
       <app-view-store *ngIf="roster.shiftAssignmentList.length > 0" [roster]="roster"></app-view-store>
 
-
-<!--      <div *ngIf="roster.shiftAssignmentList">-->
-<!--        <h2 class="mb-4">Generated Roster</h2>-->
-<!--        <div class="table-responsive">-->
-<!--          <table class="table table-bordered table-striped">-->
-<!--            <thead class="table-dark">-->
-<!--            <tr>-->
-<!--              <th>Id</th>-->
-<!--              <th>Skills</th>-->
-<!--              <th>Days</th>-->
-<!--              <th>Date</th>-->
-<!--              <th>Start Time</th>-->
-<!--              <th>End Time</th>-->
-<!--              <th>Employee Required</th>-->
-<!--              <th>Employee</th>-->
-<!--            </tr>-->
-<!--            </thead>-->
-<!--            <tbody>-->
-<!--            <tr *ngFor="let assignment of roster.shiftAssignmentList">-->
-<!--              <td>{{ assignment.id }}</td>-->
-<!--              <td>{{ assignment.dateShift.type }}</td>-->
-<!--              <td>{{ assignment.dateShift.day }}</td>-->
-<!--              <td>{{ assignment.dateShift.date }}</td>-->
-<!--              <td>{{ assignment.dateShift.startTime }}</td>-->
-<!--              <td>{{ assignment.dateShift.endTime }}</td>-->
-<!--              <td>{{ assignment.dateShift.required }}</td>-->
-<!--              <td>-->
-<!--                <table class="table table-bordered table-sm m-0 inner-table">-->
-<!--                  <thead class="table-light">-->
-<!--                  <tr>-->
-<!--                    <th>Name</th>-->
-<!--                    <th>Skills</th>-->
-<!--                    <th>Schedule</th>-->
-<!--                  </tr>-->
-<!--                  </thead>-->
-<!--                  <tbody>-->
-<!--                  <tr>-->
-<!--                    <td>{{ assignment.employee?.name }}</td>-->
-<!--                    <td>{{ assignment.employee?.position }}</td>-->
-<!--                    <td>-->
-<!--                      <div *ngFor="let id of assignment.employee?.scheduleModelIds">-->
-<!--                        <p >{{ id }}</p>-->
-<!--                      </div>-->
-<!--                    </td>-->
-<!--                  </tr>-->
-<!--                  </tbody>-->
-<!--                </table>-->
-<!--              </td>-->
-<!--            </tr>-->
-<!--            </tbody>-->
-<!--          </table>-->
-<!--        </div>-->
-<!--      </div>-->
 
       <div class="row mt-5">
         <div class="col-md-6">

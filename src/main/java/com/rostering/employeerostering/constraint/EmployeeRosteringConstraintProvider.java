@@ -4,25 +4,28 @@ import com.rostering.employeerostering.dto.EmployeeDTO;
 import com.rostering.employeerostering.dto.EmployeePairDTO;
 import com.rostering.employeerostering.entity.*;
 import com.rostering.employeerostering.service.ScheduleModelRotation;
+import com.rostering.employeerostering.service.ShiftPatternService;
 import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScore;
 import org.optaplanner.core.api.score.stream.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.WeekFields;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.Locale;
 
 public class EmployeeRosteringConstraintProvider implements ConstraintProvider {
 
-    List<ScheduleModel> scheduleModelList = ScheduleModelRotation.getScheduleModelList();
     List<EmployeePairDTO> employeePairList = ScheduleModelRotation.getEmployeePair();
+
 
     public EmployeeRosteringConstraintProvider() throws IOException {
     }
+
 
     @Override
     public Constraint[] defineConstraints(ConstraintFactory constraintFactory) {
@@ -36,8 +39,9 @@ public class EmployeeRosteringConstraintProvider implements ConstraintProvider {
                 employeeSkillMatch(constraintFactory),
                 employeeStoreAssignmentConstraint(constraintFactory),
                 noRepeatShiftTimingsForConsecutiveWeeks(constraintFactory),
-                ensurePairsScheduledTogether(constraintFactory),
-//                oneShiftPerDay(constraintFactory),
+////                ensurePairsScheduledTogether(constraintFactory),
+                oneShiftPerDay(constraintFactory),
+//                assignedOnHoliday(constraintFactory),
 
 //                shiftEmployeeCountConstraint(constraintFactory),
 
@@ -74,13 +78,24 @@ public class EmployeeRosteringConstraintProvider implements ConstraintProvider {
 //     Helper method to check if an employee is available for the shift
     private boolean isAvailable(ShiftAssignment assignment, EmployeeDTO employee) {
         int day = DayOfWeek.valueOf(assignment.getDateShift().getDay().toUpperCase()).getValue();
-        long index = ChronoUnit.WEEKS.between(assignment.getStartDate(), assignment.getDateShift().getDate());
-        ScheduleModel scheduleModel = scheduleModelList.stream().filter(item -> item.getShiftPatternId() == employee.getScheduleModelIds().get((int) index)).collect(Collectors.toList()).get(0);
-        return scheduleModel.getDurationPattern().getShiftType().get(day-1).stream().anyMatch(availability ->
-                !availability.getTimings().get(0).getStart().isAfter(assignment.getDateShift().getStartTime()) &&
-                        !availability.getTimings().get(0).getEnd().isBefore(assignment.getDateShift().getEndTime()));
+        int index = getWeeknumber(assignment.getStartDate(), assignment.getDateShift().getDate());
+        ShiftPattern shiftPattern = employee.getScheduleModel().getShiftPatternList().stream().filter(shiftPattern1 -> shiftPattern1.getId() == employee.getScheduleModelIds().get(index)).collect(Collectors.toList()).get(0);
+        return shiftPattern.getShiftTimings().stream().anyMatch(availability ->
+                availability.getDay() == day &&
+                !availability.getStart().isAfter(assignment.getDateShift().getStartTime()) &&
+                        !availability.getEnd().isBefore(assignment.getDateShift().getEndTime()));
     }
 
+    private int getWeeknumber(LocalDate startDate, LocalDate currentDate){
+
+        WeekFields weekFields = WeekFields.of(Locale.getDefault());
+        int startWeek = startDate.get(weekFields.weekOfWeekBasedYear());
+        int endWeek = currentDate.get(weekFields.weekOfWeekBasedYear());
+        int startYear = startDate.getYear();
+        int endYear = currentDate.getYear();
+
+        return (endYear - startYear) * 52 + (endWeek - startWeek);
+    }
 
     private Constraint employeeStoreAssignmentConstraint(ConstraintFactory constraintFactory) {
         return constraintFactory.forEach(ShiftAssignment.class)
@@ -208,5 +223,23 @@ public class EmployeeRosteringConstraintProvider implements ConstraintProvider {
                             assignment1.getShiftTimingType().equals(assignment2.getShiftTimingType());
                 })
                 .reward("Ensure pairs scheduled together in same shift timing", HardSoftScore.ONE_SOFT);
+    }
+
+    public Constraint assignedOnHoliday(ConstraintFactory constraintFactory){
+        return constraintFactory.forEach(ShiftAssignment.class)
+                .filter(shiftAssignment -> onHoliday(shiftAssignment.getEmployee(), shiftAssignment.getDateShift().getDate()))
+                .penalize("Employee On Holiday", HardSoftScore.ONE_HARD);
+    }
+
+    private boolean onHoliday(EmployeeDTO employee, LocalDate date){
+        boolean isOnWinterHoliday = false;
+        boolean isOnSummerHoliday = false;
+        if(employee.getWinterVacationStart() != null && employee.getWinterVacationEnd() != null){
+           isOnWinterHoliday =  (date.isEqual(employee.getWinterVacationStart()) || date.isAfter(employee.getWinterVacationStart())) && (date.isEqual(employee.getWinterVacationEnd()) || date.isBefore(employee.getWinterVacationEnd()));
+        }
+        if(employee.getSummerVacationStart() != null && employee.getSummerVacationEnd() != null){
+            isOnSummerHoliday = (date.isEqual(employee.getSummerVacationStart()) || date.isAfter(employee.getSummerVacationStart())) && (date.isEqual(employee.getSummerVacationEnd()) || date.isBefore(employee.getSummerVacationEnd()));
+        }
+        return isOnSummerHoliday || isOnWinterHoliday;
     }
 }

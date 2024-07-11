@@ -3,36 +3,55 @@
   overflow-x: scroll;
   .table-responsive{
     width: 200%;
+    max-width: fit-content;
+    overflow-x: visible;
   }
 }
 
-.table th, .table td {
+.table {
+  border-collapse: collapse;
+  .highlight-sunday {
+    background-color: #ddddde;
+  }
+}
+
+.table th,
+.table td {
+  border: 1px solid #dee2e6;
   text-align: center;
   vertical-align: middle;
+  padding: 0.75rem;
 }
 
-.table th {
-  background-color: #509ae4;
-  color: black;
+.table thead th {
+  background-color: #343a40;
+  color: #ffffff;
 }
 
-.card-title {
-  font-size: 1rem;
-  font-weight: bold;
-}
-
-.card-text {
-  font-size: 0.875rem;
-}
-
-.no-shifts {
-  color: #999;
-  font-style: italic;
-}
-
-.each-shift{
+.each-shift {
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  padding: 0.5rem;
+  background-color: #f8f9fa;
+  width: 200px;
   text-align: left;
-  border: 1px solid;
-  padding-left: 10px;
-  background-color: #e2e2e2;
+  &:hover{
+    background-color: #ddddde;
+  }
+  p{
+    margin: 0;
+  }
 }
+
+.text-muted {
+  color: #6c757d;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.m-0 {
+  margin: 0;
+}
+

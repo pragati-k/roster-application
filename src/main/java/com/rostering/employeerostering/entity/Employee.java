@@ -1,38 +1,33 @@
 package com.rostering.employeerostering.entity;
 
 
+import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.List;
+import java.time.LocalDate;
 
+@Entity
 @Getter
 @Setter
 public class Employee {
 
-    private String workerId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
     private String name;
-    private List<String> position;
-    private int assignedStoreId;
-    private ContactInfo contactInfo;
-    private List<ScheduleModel> scheduleModel;
+    private int storeId;
+    private String totalWorkingHours;
+    private String employmentType;
+    private String position;
+    private LocalDate winterVacationStart;
+    private LocalDate winterVacationEnd;
+    private LocalDate summerVacationStart;
+    private LocalDate summerVacationEnd;
+    private int startingShiftPatternId;         // for rotating shift
 
+    @ManyToOne
+    @JoinColumn(name = "schedule_model_id")
+    private ScheduleModel scheduleModel;
 
-    public Employee(String workerId, String name, List<String> position, int assignedStoreId, ContactInfo contactInfo, List<ScheduleModel> scheduleModel) {
-        this.workerId = workerId;
-        this.name = name;
-        this.position = position;
-        this.assignedStoreId = assignedStoreId;
-        this.contactInfo = contactInfo;
-        this.scheduleModel = scheduleModel;
-    }
-    @Override
-    public String toString() {
-        return "Employee{" +
-                "id='" + workerId + '\'' +
-                ", name='" + name + '\'' +
-                ", positions=" + position +
-                ", assignedStoreId=" + assignedStoreId +
-                ", scheduleModelIds=" + scheduleModel +
-                '}';
-    }
 }

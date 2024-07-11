@@ -31,11 +31,7 @@ export class RosterService {
     return this.http.get<any>(`${this.apiUrl}/terminate/` + problemId);
   }
 
-  getEmployeeList(){
-    return this.http.get(`${this.apiUrl}/employee-list`);
-  }
-
-  getProblemId(): Observable<string>{
-    return this.problemID;
+  getStoreRequirement(){
+    return this.http.get(`${this.apiUrl}/store-req`);
   }
 }

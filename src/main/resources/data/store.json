@@ -6,16 +6,16 @@
     "storeHours": ["08:00", "22:30"],
     "seasons": [
       {
-        "seasonDate": ["2024-04-01", "2024-10-31"],
+        "seasonDate": ["2024-01-01", "2024-12-31"],
         "workerRequirement": [
           {
-            "type": "Shift Manager",
+            "type": "SHIFT MANAGER",
             "shift": [
               {
                 "id": 1,
                 "days": ["MONDAY", "TUESDAY", "WEDNESDAY","THURSDAY", "FRIDAY", "SATURDAY"],
-                "startTime": "08:20",
-                "endTime": "15:15",
+                "startTime": "08:30",
+                "endTime": "15:00",
                 "required": 1
               },
               {
@@ -35,46 +35,46 @@
             ]
           },
           {
-            "type": "cashier",
+            "type": "CASHIER",
             "shift": [
               {
                 "id": 1,
-                "days": ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY"],
+                "days": ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"],
                 "startTime": "09:00",
-                "endTime": "15:30",
+                "endTime": "14:40",
                 "required": 1
               },
               {
                 "id": 2,
-                "days": ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY"],
+                "days": ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"],
                 "startTime": "14:45",
                 "endTime": "22:15",
                 "required": 1
               },
               {
                 "id": 3,
-                "days": ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY"],
+                "days": ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"],
                 "startTime": "11:00",
                 "endTime": "14:15",
                 "required": 1
               },
               {
                 "id": 4,
-                "days": ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY"],
+                "days": ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"],
                 "startTime": "18:00",
                 "endTime": "21:00",
                 "required": 1
               },
               {
                 "id": 5,
-                "days": ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY"],
+                "days": ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"],
                 "startTime": "10:15",
                 "endTime": "14:45",
                 "required": 1
               },
               {
                 "id": 6,
-                "days": ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY"],
+                "days": ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"],
                 "startTime": "19:00",
                 "endTime": "22:15",
                 "required": 1
@@ -87,7 +87,7 @@
         "seasonDate": ["2024-11-01", "2024-03-01"],
         "workerRequirement": [
           {
-            "type": "Shift Manager",
+            "type": "SHIFT MANAGER",
             "shift": [
               {
                 "id": 1,
@@ -120,7 +120,7 @@
             ]
           },
           {
-            "type": "cashier",
+            "type": "CASHIER",
             "shift": [
               {
                 "id": 1,
@@ -179,18 +179,18 @@
         "seasonDate": ["2024-11-01", "2024-03-01"],
         "workerRequirement": [
           {
-            "type": "Shift Manager",
+            "type": "SHIFT MANAGER",
             "shift": [
               {
                 "id": 1,
-                "days": ["MONDAY", "TUESDAY", "FRIDAY", "SATURDAY"],
+                "days": ["MONDAY", "TUESDAY","WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"],
                 "startTime": "08:20",
                 "endTime": "15:15",
                 "required": 2
               },
               {
                 "id": 2,
-                "days": ["MONDAY", "TUESDAY", "THURSDAY"],
+                "days": ["MONDAY", "TUESDAY", "THURSDAY", "FRIDAY", "SATURDAY"],
                 "startTime": "15:00",
                 "endTime": "22:30",
                 "required": 1
@@ -201,18 +201,11 @@
                 "startTime": "15:00",
                 "endTime": "20:00",
                 "required": 1
-              },
-              {
-                "id": 4,
-                "days": ["WEDNESDAY", "THURSDAY"],
-                "startTime": "08:25",
-                "endTime": "15:00",
-                "required": 1
               }
             ]
           },
           {
-            "type": "cashier",
+            "type": "CASHIER",
             "shift": [
               {
                 "id": 1,
