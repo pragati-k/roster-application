@@ -85,7 +85,7 @@ public class RosteringController {
         Roster solution = bestSolutionMap.get(problemId);
         for (ShiftAssignment shiftAssignment : solution.getShiftAssignmentList()) {
             if (shiftAssignment.getEmployee() != null) {
-                System.out.printf("%s - %s - %s - %s - %s\n", shiftAssignment.getDateShift().getDate(), shiftAssignment.getDateShift().getDay(), shiftAssignment.getDateShift().getType(), shiftAssignment.getDateShift().getStartTime(), shiftAssignment.getDateShift().getEndTime());
+                System.out.printf("%s - %s - %s - %s - %s\n", shiftAssignment.getDateShift().getDate(), shiftAssignment.getDateShift().getDay(), shiftAssignment.getDateShift().getPosition(), shiftAssignment.getDateShift().getStartTime(), shiftAssignment.getDateShift().getEndTime());
                 System.out.printf("%s - %s\n", shiftAssignment.getEmployee().getName(), shiftAssignment.getEmployee().getScheduleModelIds());
             }
         }

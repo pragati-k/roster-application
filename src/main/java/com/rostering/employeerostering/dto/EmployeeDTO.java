@@ -1,7 +1,6 @@
 package com.rostering.employeerostering.dto;
 
 
-import com.rostering.employeerostering.entity.ContactInfo;
 import com.rostering.employeerostering.entity.ScheduleModel;
 import lombok.Builder;
 import lombok.Getter;

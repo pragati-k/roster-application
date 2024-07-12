@@ -16,12 +16,12 @@ public class DateShift {
     private LocalTime startTime;
     private LocalTime endTime;
     private int required;
-    private String type;
+    private String position;
     private LocalDate date;
 
     public DateShift(int id, String type, String day, LocalTime startTime, LocalTime endTime, LocalDate date) {
         this.id = id;
-        this.type = type;
+        this.position = type;
         this.day = day;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -40,7 +40,7 @@ public class DateShift {
                 ", startTime=" + startTime +
                 ", endTime=" + endTime +
                 ", required=" + required +
-                ", type='" + type + '\'' +
+                ", type='" + position + '\'' +
                 ", date=" + date +
                 '}';
     }

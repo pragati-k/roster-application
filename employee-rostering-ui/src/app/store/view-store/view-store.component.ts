@@ -32,7 +32,6 @@ export class ViewStoreComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: any) {
     this.roster = changes.roster.currentValue;
-    console.log(this.roster)
       this.startDate = this.roster.shiftAssignmentList[0].startDate;
       this.endDate = this.roster.shiftAssignmentList[0].endDate
       this.organizeShiftsByTypeAndDate(this.roster.shiftAssignmentList);
@@ -43,7 +42,7 @@ export class ViewStoreComponent implements OnInit, OnChanges {
   private organizeShiftsByTypeAndDate(shifts: any[]): void {
     this.shiftsByTypeAndDate = {};
     shifts.forEach(shift => {
-      const type = shift.dateShift.type;
+      const type = shift.dateShift.position;
       const date = shift.dateShift.date;
       this.shiftTypes.add(type);
       if (!this.shiftsByTypeAndDate[type]) {

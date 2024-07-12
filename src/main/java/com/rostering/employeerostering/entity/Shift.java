@@ -1,5 +1,7 @@
 package com.rostering.employeerostering.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,21 +11,34 @@ import java.util.List;
 import java.util.Objects;
 
 
+@Entity
 @Getter
 @Setter
 public class Shift {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private List<String> days;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "shift_days", joinColumns = @JoinColumn(name = "shift_id"))
+    @Column(name = "day")
+    private List<Integer> day;
+
     private LocalTime startTime;
     private LocalTime endTime;
     private int required;
+
+    @ManyToOne
+    @JoinColumn(name = "shift_details_id")
+    @JsonIgnore
+    private ShiftDetails shiftDetails;
 
 
     @Override
     public String toString() {
         return "Shift{" +
                 "id=" + id +
-                ", days=" + days +
+                ", days=" + day +
                 ", startTime=" + startTime +
                 ", endTime=" + endTime +
                 ", required=" + required +

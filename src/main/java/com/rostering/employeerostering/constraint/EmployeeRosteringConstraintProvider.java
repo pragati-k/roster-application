@@ -40,7 +40,7 @@ public class EmployeeRosteringConstraintProvider implements ConstraintProvider {
                 employeeStoreAssignmentConstraint(constraintFactory),
                 noRepeatShiftTimingsForConsecutiveWeeks(constraintFactory),
 ////                ensurePairsScheduledTogether(constraintFactory),
-                oneShiftPerDay(constraintFactory),
+//                oneShiftPerDay(constraintFactory),
 //                assignedOnHoliday(constraintFactory),
 
 //                shiftEmployeeCountConstraint(constraintFactory),
@@ -65,7 +65,7 @@ public class EmployeeRosteringConstraintProvider implements ConstraintProvider {
 
     private Constraint employeeSkillMatch(ConstraintFactory constraintFactory) {
         return constraintFactory.forEach(ShiftAssignment.class)
-                .filter(assignment -> !assignment.getEmployee().getPosition().contains(assignment.getDateShift().getType()))
+                .filter(assignment -> !assignment.getEmployee().getPosition().contains(assignment.getDateShift().getPosition()))
                 .penalize("Employee skill mismatch", HardSoftScore.ONE_HARD);
     }
 

@@ -12,10 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.temporal.WeekFields;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,6 +26,9 @@ public class ShiftGenerator {
 
     @Autowired
     private EmployeeRepo employeeRepo;
+
+    @Autowired
+    private StoreService storeService;
 
     private Roster finalRoster = new Roster();
 
@@ -45,7 +45,7 @@ public class ShiftGenerator {
             EmployeeDTO newEmployee = EmployeeDTO.builder()
                     .workerId(employee.getId())
                     .name(employee.getName())
-                    .position(Arrays.stream(employee.getPosition().split("/")).toList())
+                    .position(Collections.singletonList(employee.getPosition()))
                     .assignedStoreId(employee.getStoreId())
                     .scheduleModel(employee.getScheduleModel())
                     .employmentType(employee.getEmploymentType())
@@ -55,7 +55,7 @@ public class ShiftGenerator {
                     .winterVacationEnd(employee.getWinterVacationEnd())
                     .totalWorkingHours(employee.getTotalWorkingHours()).build();
             List<Integer> tempScheduleModelId = employee.getScheduleModel().getShiftPatternList().stream().map(item -> item.getId()).collect(Collectors.toList());
-            if(employee.getStartingShiftPatternId() != 0){
+            if (employee.getStartingShiftPatternId() != 0) {
                 tempScheduleModelId = tempScheduleModelId.stream().filter(item -> item != employee.getStartingShiftPatternId()).collect(Collectors.toList());
                 tempScheduleModelId.add(0, employee.getStartingShiftPatternId());
             }
@@ -64,8 +64,9 @@ public class ShiftGenerator {
         }
         employeesDTO.forEach(item -> item.setScheduleModelIds(scheduleModelRotation.repeatTillNNonConsecutive(item.getScheduleModelIds(), numberOfWeeks)));
 
-        List<Store> stores = Arrays.asList(objectMapper.readValue(storeFile.getInputStream(), Store[].class));
-
+//        List<Store> stores = Arrays.asList(objectMapper.readValue(storeFile.getInputStream(), Store[].class));
+//        storeService.saveAll(stores);
+        List<Store> stores = storeService.getAllStores();
         Roster roster = new Roster();
         roster.setEmployeeList(employeesDTO);
         List<ShiftAssignment> shiftAssignmentList = new ArrayList<>();
@@ -73,9 +74,9 @@ public class ShiftGenerator {
         int i = 0;
         for (Store s : stores) {
             Seasons seasonType = s.getSeasons().stream()
-                    .filter(seasons -> LocalDate.parse(startDate).isAfter(seasons.getSeasonDate().get(0)) && LocalDate.parse(endDate).isBefore(seasons.getSeasonDate().get(1)))
+                    .filter(seasons -> LocalDate.parse(startDate).isAfter(seasons.getSeasonStartDate()) && LocalDate.parse(endDate).isBefore(seasons.getSeasonEndDate()))
                     .findFirst().orElse(new Seasons());
-            roster.setSeasonDate(seasonType.getSeasonDate());
+            roster.setSeasonDate(Arrays.asList(seasonType.getSeasonStartDate(), seasonType.getSeasonEndDate()));
             for (WorkerRequirement workerRequirement : seasonType.getWorkerRequirement()) {
 
                 List<DateShift> dateShifts = ShiftGenerator.start(workerRequirement, startDate, endDate);
@@ -84,7 +85,7 @@ public class ShiftGenerator {
                     for(int requriedNumber = 0; requriedNumber < totalRequried; requriedNumber++){
                         ShiftAssignment shiftAssignment = new ShiftAssignment();
                         shiftAssignment.setId(i);
-                        shiftAssignment.setStore_id(s.getStoreId());
+                        shiftAssignment.setStore_id(s.getId());
                         shift.setRequired(1);
                         shiftAssignment.setDateShift(shift);
                         shiftAssignmentList.add(shiftAssignment);
@@ -121,22 +122,23 @@ public class ShiftGenerator {
 
         // Iterate over each date in the range
         for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusDays(1)) {
-            String dayOfWeek = date.getDayOfWeek().name().toUpperCase();
-                for(Shift shift: workerRequirement.getShift()){
-                    if(shift.getDays().contains(dayOfWeek)){
+            int dayOfWeek = date.getDayOfWeek().getValue();
+            for (ShiftDetails shiftDetails : workerRequirement.getAllShifts()) {
+                for (Shift shift : shiftDetails.getShifts())
+                    if (shift.getDay().contains(dayOfWeek)) {
                         DateShift dateShift = new DateShift();
-                        dateShift.setType(workerRequirement.getType());
+                        dateShift.setPosition(workerRequirement.getPosition());
                         dateShift.setDate(date);
                         dateShift.setId(shift.getId());
                         dateShift.setRequired(shift.getRequired());
-                        dateShift.setDay(dayOfWeek);
+                        dateShift.setDay(date.getDayOfWeek().name().toUpperCase());
                         dateShift.setStartTime(shift.getStartTime());
                         dateShift.setEndTime(shift.getEndTime());
                         shifts.add(dateShift);
                     }
-                }
-
             }
+
+        }
 
         return shifts;
     }
